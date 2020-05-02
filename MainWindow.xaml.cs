@@ -56,16 +56,31 @@ namespace OcarinaPlayer
             }
             if(player.PlaybackState == PlaybackState.Playing)
             {
-                return;
+                player.Pause();
+                playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
             }
+            else if(player.PlaybackState == PlaybackState.Paused)
+            {
+                player.Play();
+                playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
+            }
+            else { 
             WaveStream mainOutputStream = new Mp3FileReader(file);
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
+                volumeStream.PadWithZeroes = false;
 
 
             player.Init(volumeStream);
-
+            
+            player.PlaybackStopped += new EventHandler<StoppedEventArgs>(onPlaybackStop);
             player.Play();
+
             playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
+            }
+        }
+        public void onPlaybackStop(object sender, EventArgs e)
+        {
+            playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
         }
     }
 }

@@ -108,5 +108,10 @@
   <ItemGroup>
     <Resource Include="OCARINA2.ico" />
   </ItemGroup>
+<ItemGroup>
+    <Content Include="assets/img/**/*.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+</ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
