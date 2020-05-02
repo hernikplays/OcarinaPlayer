@@ -56,26 +56,26 @@ namespace OcarinaPlayer
             }
             if(player.PlaybackState == PlaybackState.Playing)
             {
-                player.Pause();
+                player.Pause(); //pause
                 playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
             }
             else if(player.PlaybackState == PlaybackState.Paused)
             {
-                player.Play();
+                player.Play(); //resume
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
             }
             else { 
             WaveStream mainOutputStream = new Mp3FileReader(file);
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
-                volumeStream.PadWithZeroes = false;
+                volumeStream.PadWithZeroes = false; //https://stackoverflow.com/a/11280383
 
 
-            player.Init(volumeStream);
+                player.Init(volumeStream); //Initialize WaveChannel
             
-            player.PlaybackStopped += new EventHandler<StoppedEventArgs>(onPlaybackStop);
-            player.Play();
+            player.PlaybackStopped += new EventHandler<StoppedEventArgs>(onPlaybackStop); //function to launch when playback stops
+            player.Play(); //play
 
-            playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
+            playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative)); //change button image
             }
         }
         public void onPlaybackStop(object sender, EventArgs e)
