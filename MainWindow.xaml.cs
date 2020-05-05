@@ -19,7 +19,8 @@ using PlaylistsNET.Content;
 using TagLib.Mpeg;
 using System.IO;
 using System.Runtime.CompilerServices;
-
+using DiscordRPC;
+using DiscordRPC.Logging;
 namespace OcarinaPlayer
 {
     /// <summary>
@@ -27,10 +28,47 @@ namespace OcarinaPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DiscordRpcClient client = new DiscordRpcClient("690238946378121296");
+
         public MainWindow()
         {
             InitializeComponent();
+            //Loaded += OnLoad;
         }
+        private void OnLoad(object sender, RoutedEventArgs e)
+        {
+            //Set the logger
+            client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
+
+            //Subscribe to events
+            client.OnReady += (senderRPC, eRPC) =>
+            {
+                Console.WriteLine("Received Ready from user {0}", eRPC.User.Username);
+            };
+
+            client.OnPresenceUpdate += (senderRPC, eRPC) =>
+            {
+                Console.WriteLine("Received Update! {0}", eRPC.Presence);
+            };
+
+            //Connect to the RPC
+            client.Initialize();
+
+            //Set the rich presence
+            //Call this as many times as you want and anywhere in your code.
+            client.SetPresence(new RichPresence()
+            {
+                Details = "Not listening to anything",
+                State = "...",
+                Assets = new Assets()
+                {
+                    LargeImageKey = "rpcon",
+                    LargeImageText = "Ocarina Music Player"
+                }
+
+            });
+        }
+
         private WaveOutEvent player = new WaveOutEvent();
         private List<string> file = new List<string>();
         private int i = 0;
@@ -66,11 +104,36 @@ namespace OcarinaPlayer
             if(player.PlaybackState == PlaybackState.Playing)
             {
                 player.Pause(); //pause
+                var playing = TagLib.File.Create(file[i]);
+                client.SetPresence(new RichPresence()
+                {
+
+                    Details = "Listening to " + playing.Tag.Title,
+                    State = "Paused",
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = "rpcon",
+                        LargeImageText = "Ocarina Music Player"
+                    }
+
+                });
                 playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
             }
             else if(player.PlaybackState == PlaybackState.Paused)
             {
                 player.Play(); //resume
+                var playing = TagLib.File.Create(file[i]);
+                client.SetPresence(new RichPresence()
+                {
+                    Details = "Listening to " + playing.Tag.Title,
+                    State = "by " + playing.Tag.FirstPerformer,
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = "rpcon",
+                        LargeImageText = "Ocarina Music Player"
+                    }
+
+                });
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
             }
             
@@ -84,6 +147,20 @@ namespace OcarinaPlayer
             
             player.PlaybackStopped += new EventHandler<StoppedEventArgs>(onPlaybackStop); //function to launch when playback stops
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative)); //change button image
+
+                var playing = TagLib.File.Create(file[i]);
+                client.SetPresence(new RichPresence()
+                {
+                    Details = "Listening to " +playing.Tag.Title,
+                    State = "by "+playing.Tag.FirstPerformer,
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = "rpcon",
+                        LargeImageText = "Ocarina Music Player"
+                    }
+
+                });
+
                 player.Play(); //play
 
             

@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using DiscordRPC;
+using DiscordRPC.Logging;
 
 namespace OcarinaPlayer
 {
@@ -13,5 +15,6 @@ namespace OcarinaPlayer
     /// </summary>
     public partial class App : Application
     {
-    }
+		
+	}
 }
