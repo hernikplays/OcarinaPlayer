@@ -82,6 +82,8 @@ namespace OcarinaPlayer
             {
                 MessageBox.Show(open.FileName);
 
+                file.Clear();
+
                 foreach (string files in open.FileNames)
                 {
                     file.Add(files); //saves all files into list
@@ -134,6 +136,7 @@ namespace OcarinaPlayer
                     }
 
                 });
+                
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
             }
             
@@ -145,7 +148,7 @@ namespace OcarinaPlayer
 
                 player.Init(volumeStream); //Initialize WaveChannel
             
-            player.PlaybackStopped += new EventHandler<StoppedEventArgs>(onPlaybackStop); //function to launch when playback stops
+               player.PlaybackStopped += new EventHandler<StoppedEventArgs>(onPlaybackStop); //function to launch when playback stops
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative)); //change button image
 
                 var playing = TagLib.File.Create(file[i]);
@@ -160,6 +163,13 @@ namespace OcarinaPlayer
                     }
 
                 });
+
+                if(playing.Tag.Pictures.Length >= 1)
+                {
+                    MemoryStream stream = new MemoryStream(playing.Tag.Pictures[0].Data.Data);
+                    BitmapFrame bmp = BitmapFrame.Create(stream);
+                    albumArt.Source = bmp;
+                }
 
                 player.Play(); //play
 
@@ -227,12 +237,12 @@ namespace OcarinaPlayer
 
             foreach (var files in file)
             {
-                Mp3FileReader reader = new Mp3FileReader(files);
+                
                 playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
                 {
                     Album = filesToRead[foreachindex].Tag.Album,
                     AlbumArtist = filesToRead[foreachindex].Tag.FirstAlbumArtist,
-                    Duration = reader.TotalTime,
+                    Duration = filesToRead[foreachindex].Properties.Duration,
                     Path = files,
                     Title = filesToRead[foreachindex].Tag.Title
                 });

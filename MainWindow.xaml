@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Ocarina" Height="450" Width="800" MinWidth="800" MinHeight="450"
         Loaded="OnLoad"
+        SizeToContent="WidthAndHeight"
         >
 
     <DockPanel MinWidth="792" MinHeight="419">
@@ -19,7 +20,7 @@
                 <MenuItem Header="Exit" />
             </MenuItem>
         </Menu>
-        <Grid Height="401" VerticalAlignment="Top" Width="789" MinWidth="789" MinHeight="401">
+        <Grid Height="401" VerticalAlignment="Stretch" Width="789" MinWidth="789" MinHeight="401" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
@@ -52,6 +53,7 @@
                     </Image>
                 </Button>
             </Grid>
+            <Image HorizontalAlignment="Left" Height="182" Margin="10,166,0,0" VerticalAlignment="Top" Width="182" Grid.Column="0" Grid.Row="0" Name="albumArt"/>
         </Grid>
 
 
