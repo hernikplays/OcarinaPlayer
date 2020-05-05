@@ -28,18 +28,22 @@ namespace OcarinaPlayer
             InitializeComponent();
         }
         private WaveOutEvent player = new WaveOutEvent();
-        private string file = string.Empty;
+        private List<string> file = new List<string>();
 
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        private void openFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog open = new OpenFileDialog();
+            open.Multiselect = true; //multiple fileselect
             open.Filter = "Audio File|*.mp3;";
             if (open.ShowDialog() == true)
             {
                 MessageBox.Show(open.FileName);
 
-                file = open.FileName;
-
+                foreach (string files in open.FileNames)
+                {
+                    file.Add(files); //saves all files into list
+                }
+                
             }
             else
             {
@@ -49,7 +53,7 @@ namespace OcarinaPlayer
         }
         private void btnPlay_Click(object sender, RoutedEventArgs e)
         {
-            if(file == string.Empty)
+            if(!file.Any())
             {
                  MessageBox.Show("You need to open a file first");
                 return;
@@ -65,7 +69,7 @@ namespace OcarinaPlayer
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
             }
             else { 
-            WaveStream mainOutputStream = new Mp3FileReader(file);
+            WaveStream mainOutputStream = new Mp3FileReader(file[0]); //plays first item from selected music
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
                 volumeStream.PadWithZeroes = false; //https://stackoverflow.com/a/11280383
 

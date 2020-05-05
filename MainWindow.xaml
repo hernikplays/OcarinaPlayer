@@ -6,9 +6,17 @@
         xmlns:local="clr-namespace:OcarinaPlayer"
         mc:Ignorable="d"
         Title="Ocarina" Height="450" Width="800">
-    <DockPanel Margin="10">
+    
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Click="openFile"/>
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+        </Menu>
         <WrapPanel HorizontalAlignment="Left" DockPanel.Dock="Top" Margin="10,0,0,10" Width="230" VerticalAlignment="Bottom">
-            <Button Name="btnOpenFile" Click="btnOpenFile_Click" Height="33" Width="174">Open file</Button>
+            
             <Button Width="35" Click="btnPlay_Click" VerticalAlignment="Center" Height="35" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
                 <Image Source="assets/img/play.png"  RenderTransformOrigin="0.5,0.5" Name="playBtn">
 
