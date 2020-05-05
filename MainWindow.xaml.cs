@@ -29,6 +29,7 @@ namespace OcarinaPlayer
         }
         private WaveOutEvent player = new WaveOutEvent();
         private List<string> file = new List<string>();
+        private int i = 0;
 
         private void openFile(object sender, RoutedEventArgs e)
         {
@@ -51,7 +52,7 @@ namespace OcarinaPlayer
                 return;
             }
         }
-        private void btnPlay_Click(object sender, RoutedEventArgs e)
+        private void play(object sender, RoutedEventArgs e)
         {
             if(!file.Any())
             {
@@ -69,7 +70,7 @@ namespace OcarinaPlayer
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
             }
             else { 
-            WaveStream mainOutputStream = new Mp3FileReader(file[0]); //plays first item from selected music
+            WaveStream mainOutputStream = new Mp3FileReader(file[i]); //plays first item from selected music
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
                 volumeStream.PadWithZeroes = false; //https://stackoverflow.com/a/11280383
 
@@ -85,6 +86,24 @@ namespace OcarinaPlayer
         public void onPlaybackStop(object sender, EventArgs e)
         {
             playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
+        }
+
+        private void btnNext_Click(object sender, RoutedEventArgs e)
+        {
+            stop(sender,e);
+            i += 1;
+            play(sender, e);
+        }
+        private void btnPrev_Click(object sender, RoutedEventArgs e)
+        {
+            stop(sender, e);
+            i -= 1;
+            play(sender, e);
+        }
+        public void stop(object sender, RoutedEventArgs e)
+        {
+            player.Stop();
+
         }
     }
 }

@@ -16,9 +16,18 @@
             </MenuItem>
         </Menu>
         <WrapPanel HorizontalAlignment="Left" DockPanel.Dock="Top" Margin="10,0,0,10" Width="230" VerticalAlignment="Bottom">
-            
-            <Button Width="35" Click="btnPlay_Click" VerticalAlignment="Center" Height="35" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <Button Width="35" Click="btnPrev_Click" VerticalAlignment="Center" Height="35" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                <Image Source="assets/img/prev.png"  RenderTransformOrigin="0.5,0.5" Name="prevBtn" >
+
+                </Image>
+            </Button>
+            <Button Width="35" Click="play" VerticalAlignment="Center" Height="35" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
                 <Image Source="assets/img/play.png"  RenderTransformOrigin="0.5,0.5" Name="playBtn">
+
+                </Image>
+            </Button>
+            <Button Width="35" Click="btnNext_Click" VerticalAlignment="Center" Height="35" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                <Image Source="assets/img/next.png"  RenderTransformOrigin="0.5,0.5" Name="nextBtn">
 
                 </Image>
             </Button>

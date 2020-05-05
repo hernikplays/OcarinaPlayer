@@ -8,10 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{968D61AF-37B4-4C8F-9188-FD014DE851E1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{E36C6ABC-39EA-4C72-9116-2C0F3B8BCE1E}"
-	ProjectSection(SolutionItems) = preProject
-		assets\img\pause.png = assets\img\pause.png
-		assets\img\play.png = assets\img\play.png
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
