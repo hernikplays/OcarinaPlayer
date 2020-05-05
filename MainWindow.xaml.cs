@@ -14,7 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using NAudio.Wave;
-using NAudio.Wave.SampleProviders;
+using PlaylistsNET.Models;
+using PlaylistsNET.Content;
+using TagLib.Mpeg;
+using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace OcarinaPlayer
 {
@@ -69,6 +73,7 @@ namespace OcarinaPlayer
                 player.Play(); //resume
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
             }
+            
             else { 
             WaveStream mainOutputStream = new Mp3FileReader(file[i]); //plays first item from selected music
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
@@ -78,9 +83,10 @@ namespace OcarinaPlayer
                 player.Init(volumeStream); //Initialize WaveChannel
             
             player.PlaybackStopped += new EventHandler<StoppedEventArgs>(onPlaybackStop); //function to launch when playback stops
-            player.Play(); //play
+                playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative)); //change button image
+                player.Play(); //play
 
-            playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative)); //change button image
+            
             }
         }
         public void onPlaybackStop(object sender, EventArgs e)
@@ -104,6 +110,81 @@ namespace OcarinaPlayer
         {
             player.Stop();
 
+        }
+
+        private void savePL(object sender, RoutedEventArgs e)
+        {
+            if (!file.Any())
+            {
+                MessageBox.Show("You need to open some files first");
+                return;
+            }
+
+            SaveFileDialog savefile = new SaveFileDialog();
+            savefile.Filter = "Playlist Files|*.m3u;";
+            savefile.FileName = "MyPlaylist.m3u";
+            if (savefile.ShowDialog() == true)
+            {
+                MessageBox.Show(savefile.FileName);
+
+            }
+            else
+            {
+                MessageBox.Show("An Error occured");
+                return;
+            }
+            
+
+            List<TagLib.File> filesToRead = new List<TagLib.File>();
+
+            foreach (string files in file)
+            {
+                var filetoRead = TagLib.File.Create(files);
+                filesToRead.Add(filetoRead);
+            }
+
+            M3uPlaylist playlist = new M3uPlaylist();
+            playlist.IsExtended = true;
+
+            int foreachindex = 0;
+
+            foreach (var files in file)
+            {
+                Mp3FileReader reader = new Mp3FileReader(files);
+                playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
+                {
+                    Album = filesToRead[foreachindex].Tag.Album,
+                    AlbumArtist = filesToRead[foreachindex].Tag.FirstAlbumArtist,
+                    Duration = reader.TotalTime,
+                    Path = files,
+                    Title = filesToRead[foreachindex].Tag.Title
+                });
+            }
+
+            M3uContent content = new M3uContent();
+            string text = content.ToText(playlist);
+
+            System.IO.File.WriteAllText(savefile.FileName, text);
+
+            MessageBox.Show("Succesfully saved to" + savefile.FileName);
+        }
+
+        private void openPL(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog pl = new OpenFileDialog();
+            pl.Filter = "Playlist Files|*.m3u;";
+           
+            if(pl.ShowDialog() != true)
+            {
+                MessageBox.Show("An Error occured");
+                return;
+            }
+
+            M3uContent content = new M3uContent();
+            FileStream read = new FileStream(pl.FileName, FileMode.Open);
+            M3uPlaylist playlist = content.GetFromStream(read);
+
+            file = playlist.GetTracksPaths();
         }
     }
 }
