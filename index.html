@@ -19,10 +19,28 @@
 
   <link rel="shortcut icon" href="./assets/img/favicon.ico" type="image/vnd.microsoft.icon">
   <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:600|Roboto&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="header">
-        
+        <img src="assets/img/logo.png" class="icon">
+        <h1 class="name">Ocarina</h1>
+        <h2 class="subtext">Simple, lightweight, open-source music player written in C#</h2>
+        <a href="https://github.com/hernikplays/OcarinaPlayer/releases/latest"> <button id="dl"></button> </a>
     </div>
+
+<script>
+  fetch('https://api.github.com/repos/hernikplays/OcarinaPlayer/releases/latest')
+  .then(response => {
+    return response.json()
+  })
+  .then(data => {
+    document.getElementById("dl").innerHTML = `<p class="big">Download</p><p class="version">Version: ${data.tag_name}</p>`
+    console.log(data)
+    data.tag_name
+  })
+  
+  </script>
+
   </body>
 </html>
