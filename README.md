@@ -8,4 +8,4 @@ Currently implemented:
 - Playing/Pausing/Skipping
 - Album Art
 - Open/Save m3u playlists
-- Discord Rich Presence
+- Discord Rich Presence 
