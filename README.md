@@ -1,6 +1,6 @@
 # OcarinaPlayer
 
-[![Build status](https://ci.appveyor.com/api/projects/status/si1iaaty6ptu7t53?svg=true)](https://ci.appveyor.com/project/hernikplays/ocarinaplayer)
+![Build status](https://ci.appveyor.com/api/projects/status/si1iaaty6ptu7t53?svg=true) [![Liberapay Patrons](http://img.shields.io/liberapay/patrons/hernikplays.svg?logo=liberapay)](https://liberapay.com/hernikplays)
 
 Simple C# music player
 
