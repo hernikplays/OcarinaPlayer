@@ -4,8 +4,4 @@
 
 Simple C# music player
 
-Currently implemented:
-- Playing/Pausing/Skipping
-- Album Art
-- Open/Save m3u playlists
-- Discord Rich Presence 
+Track what's currently implemented [here](https://github.com/hernikplays/OcarinaPlayer/projects/1) and request feature/submit issues [here](https://github.com/hernikplays/OcarinaPlayer/issues/new/choose).
