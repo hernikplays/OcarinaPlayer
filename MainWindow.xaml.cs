@@ -21,6 +21,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using DiscordRPC;
 using DiscordRPC.Logging;
+
 namespace OcarinaPlayer
 {
     /// <summary>
@@ -71,7 +72,7 @@ namespace OcarinaPlayer
 
         private WaveOutEvent player = new WaveOutEvent();
         private List<string> file = new List<string>();
-        private int i = 0;
+        public int i = 0;
 
         private void openFile(object sender, RoutedEventArgs e)
         {
@@ -179,18 +180,35 @@ namespace OcarinaPlayer
         public void onPlaybackStop(object sender, EventArgs e)
         {
             playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
+            
+            
         }
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            stop(sender,e);
-            i += 1;
+            i = i + 1;
+            jakejeI.Content = i;
+            if (i > file.Count - 1)
+            {
+                i = 0;
+                jakejeI.Content = i;
+            }
+            stop(sender, e);
+            
             play(sender, e);
         }
         private void btnPrev_Click(object sender, RoutedEventArgs e)
         {
+            i = i - 1;
+            if (i == -1)
+            {
+
+                i = file.Count - 1;
+                jakejeI.Content = i;
+            }
+            jakejeI.Content = i;
             stop(sender, e);
-            i -= 1;
+            
             play(sender, e);
         }
         public void stop(object sender, RoutedEventArgs e)
