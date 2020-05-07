@@ -21,6 +21,8 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using DiscordRPC;
 using DiscordRPC.Logging;
+using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace OcarinaPlayer
 {
@@ -142,14 +144,14 @@ namespace OcarinaPlayer
             }
             
             else { 
-            WaveStream mainOutputStream = new Mp3FileReader(file[i]); //plays first item from selected music
+            WaveStream mainOutputStream = new Mp3FileReader(file[i]); //plays item from selected music
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
                 volumeStream.PadWithZeroes = false; //https://stackoverflow.com/a/11280383
 
 
                 player.Init(volumeStream); //Initialize WaveChannel
-            
-               player.PlaybackStopped += new EventHandler<StoppedEventArgs>(onPlaybackStop); //function to launch when playback stops
+
+                
                 playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative)); //change button image
 
                 var playing = TagLib.File.Create(file[i]);
@@ -172,14 +174,43 @@ namespace OcarinaPlayer
                     albumArt.Source = bmp;
                 }
 
+                
+
                 player.Play(); //play
 
-            
+                var aTimer = new DispatcherTimer();
+                aTimer.Tick += (sende, e2) => updateSec(sender, e, mainOutputStream);
+                aTimer.Interval = new TimeSpan(0, 0, 1);
+                aTimer.Start();
+
+                player.PlaybackStopped += (sende, e2) => onPlaybackStop(sender, e, mainOutputStream, aTimer); //function to launch when playback stops
             }
         }
-        public void onPlaybackStop(object sender, EventArgs e)
+
+        private void updateSec(object sender, EventArgs e, WaveStream mainOutputStream)
+        {
+            int hh = mainOutputStream.CurrentTime.Hours;
+            int mm = mainOutputStream.CurrentTime.Minutes;
+            int ss = mainOutputStream.CurrentTime.Seconds;
+
+            var thetime = mainOutputStream.CurrentTime.ToString();
+            // Updating the Label which displays the current second
+            jakejeI.Content = string.Format("{0}:{1}:{2}", hh, mm, ss);
+
+            // Forcing the CommandManager to raise the RequerySuggested event
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        public void onPlaybackStop(object sender, EventArgs e, WaveStream reader, DispatcherTimer timer)
         {
             playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
+
+            timer.Stop();
+
+            if(reader.CurrentTime == reader.TotalTime)
+            {
+                MessageBox.Show("Pisnicka skoncila");
+            }
             
             
         }
@@ -187,11 +218,11 @@ namespace OcarinaPlayer
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
             i = i + 1;
-            jakejeI.Content = i;
+            
             if (i > file.Count - 1)
             {
                 i = 0;
-                jakejeI.Content = i;
+                
             }
             stop(sender, e);
             
@@ -204,9 +235,9 @@ namespace OcarinaPlayer
             {
 
                 i = file.Count - 1;
-                jakejeI.Content = i;
+                
             }
-            jakejeI.Content = i;
+            
             stop(sender, e);
             
             play(sender, e);
@@ -291,5 +322,7 @@ namespace OcarinaPlayer
 
             file = playlist.GetTracksPaths();
         }
+
+
     }
 }

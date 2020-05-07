@@ -54,7 +54,7 @@
                 </Button>
             </Grid>
             <Image HorizontalAlignment="Left" Height="182" Margin="10,166,0,0" VerticalAlignment="Top" Width="182" Grid.Column="0" Grid.Row="0" Name="albumArt"/>
-            <Label Content="Label" HorizontalAlignment="Left" Margin="324,70,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Name="jakejeI"/>
+            <Label Content="Label" Width="100" HorizontalAlignment="Left" Margin="128,337,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="jakejeI" FontSize="16"/>
         </Grid>
 
 
