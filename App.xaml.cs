@@ -15,6 +15,10 @@ namespace OcarinaPlayer
     /// </summary>
     public partial class App : Application
     {
-		
+		public void onExit(object sender, EventArgs e)
+        {
+            var window = (MainWindow)Application.Current.MainWindow;
+            window.onCloseApp(sender, e);
+        }
 	}
 }

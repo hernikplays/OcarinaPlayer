@@ -323,6 +323,10 @@ namespace OcarinaPlayer
             file = playlist.GetTracksPaths();
         }
 
+        public void onCloseApp(object sender, EventArgs e)
+        {
+            client.Dispose();
+        }
 
     }
 }
