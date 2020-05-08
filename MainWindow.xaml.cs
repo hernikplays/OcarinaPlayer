@@ -36,7 +36,7 @@ namespace OcarinaPlayer
         public MainWindow()
         {
             InitializeComponent();
-            //Loaded += OnLoad;
+            Closed += onCloseApp;
         }
         private void OnLoad(object sender, RoutedEventArgs e)
         {
@@ -106,7 +106,11 @@ namespace OcarinaPlayer
                  MessageBox.Show("You need to open a file first");
                 return;
             }
-            if(player.PlaybackState == PlaybackState.Playing)
+
+            WaveStream mainOutputStream = new Mp3FileReader(file[i]); //plays item from selected music
+            WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
+
+            if (player.PlaybackState == PlaybackState.Playing)
             {
                 player.Pause(); //pause
                 var playing = TagLib.File.Create(file[i]);
@@ -132,6 +136,7 @@ namespace OcarinaPlayer
                 {
                     Details = "Listening to " + playing.Tag.Title,
                     State = "by " + playing.Tag.FirstPerformer,
+                    Timestamps = Timestamps.Now,
                     Assets = new Assets()
                     {
                         LargeImageKey = "rpcon",
@@ -144,8 +149,7 @@ namespace OcarinaPlayer
             }
             
             else { 
-            WaveStream mainOutputStream = new Mp3FileReader(file[i]); //plays item from selected music
-            WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
+            
                 volumeStream.PadWithZeroes = false; //https://stackoverflow.com/a/11280383
 
 
@@ -159,10 +163,12 @@ namespace OcarinaPlayer
                 {
                     Details = "Listening to " +playing.Tag.Title,
                     State = "by "+playing.Tag.FirstPerformer,
+                    Timestamps = Timestamps.FromTimeSpan(mainOutputStream.CurrentTime),
                     Assets = new Assets()
                     {
                         LargeImageKey = "rpcon",
                         LargeImageText = "Ocarina Music Player"
+
                     }
 
                 });
