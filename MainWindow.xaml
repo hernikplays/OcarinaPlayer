@@ -22,20 +22,20 @@
         </Menu>
         <Grid Height="401" VerticalAlignment="Stretch" Width="789" MinWidth="789" MinHeight="401" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Height="36" VerticalAlignment="Bottom" Width="113" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Margin="10,0,0,10">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="35"></ColumnDefinition>
-                    <ColumnDefinition Width="35"></ColumnDefinition>
-                    <ColumnDefinition Width="35"></ColumnDefinition>
+                    <ColumnDefinition Width="35*"></ColumnDefinition>
+                    <ColumnDefinition Width="35*"></ColumnDefinition>
+                    <ColumnDefinition Width="35*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Button Grid.Column="0" Grid.Row="0"  Width="35" Click="btnPrev_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="35" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
                     <Image Source="assets/img/prev.png"  RenderTransformOrigin="0.5,0.5" Name="prevBtn" >
@@ -54,7 +54,7 @@
                 </Button>
             </Grid>
             <Image HorizontalAlignment="Left" Height="182" Margin="10,166,0,0" VerticalAlignment="Top" Width="182" Grid.Column="0" Grid.Row="0" Name="albumArt"/>
-            <Label Content="00:00" Width="100" HorizontalAlignment="Left" Margin="128,359,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="jakejeI" FontSize="16"/>
+            <Label Content="00:00" Width="100" HorizontalAlignment="Left" Margin="128,359,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="16"/>
         </Grid>
 
 

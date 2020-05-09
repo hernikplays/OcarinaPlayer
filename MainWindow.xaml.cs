@@ -110,6 +110,7 @@ namespace OcarinaPlayer
             WaveStream mainOutputStream = new Mp3FileReader(file[i]); //plays item from selected music
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
 
+            
             if (player.PlaybackState == PlaybackState.Playing)
             {
                 player.Pause(); //pause
@@ -199,9 +200,9 @@ namespace OcarinaPlayer
             int mm = mainOutputStream.CurrentTime.Minutes;
             int ss = mainOutputStream.CurrentTime.Seconds;
 
-            var thetime = mainOutputStream.CurrentTime.ToString();
+            var thetime = mainOutputStream.CurrentTime.ToString("mm\\:ss");
             // Updating the Label which displays the current second
-            jakejeI.Content = string.Format("{0}:{1}:{2}", hh, mm, ss);
+            cas.Content = thetime;
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
