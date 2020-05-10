@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import net.arikia.dev.drpc.DiscordRPC;
 
 public class Main extends Application {
 
@@ -22,6 +23,11 @@ public class Main extends Application {
         controller.setStage(primaryStage);
     }
 
+    @Override
+    public void stop() throws Exception {
+        DiscordRPC.discordShutdown();
+        super.stop();
+    }
 
     public static void main(String[] args) {
         launch(args);

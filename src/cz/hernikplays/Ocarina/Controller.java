@@ -12,7 +12,9 @@ import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 
+
 import java.io.File;
+import java.io.IOException;
 
 public class Controller {
     private Stage myStage;
@@ -24,7 +26,7 @@ public class Controller {
 
     public void initialize(){
         DiscordRPC.discordInitialize("690238946378121296", handlers, true);
-        DiscordRichPresence rich = new DiscordRichPresence.Builder("This is the current state.").setDetails("These are some details.").build();
+        DiscordRichPresence rich = new DiscordRichPresence.Builder("...").setDetails("Not listening to anything.").setBigImage("rpcon", "Ocarina Music Player").build();
         DiscordRPC.discordUpdatePresence(rich);
     }
 
@@ -37,7 +39,7 @@ public class Controller {
     }
 
     @FXML
-    public void play(ActionEvent event){
+    public void play(ActionEvent event) {
         Alert nofile = new Alert(Alert.AlertType.ERROR, "No file selected", ButtonType.OK);
         if(selected == null){
             nofile.show();
@@ -47,6 +49,8 @@ public class Controller {
         mediaPlayer = new MediaPlayer(hit);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
+
+
 
         /*MediaView mediaView = new MediaView(mediaPlayer);
         ((Group)scene.getRoot()).getChildren().add(mediaView);*/
