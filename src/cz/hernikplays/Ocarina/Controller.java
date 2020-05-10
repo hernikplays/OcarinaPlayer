@@ -8,6 +8,9 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import net.arikia.dev.drpc.DiscordEventHandlers;
+import net.arikia.dev.drpc.DiscordRPC;
+import net.arikia.dev.drpc.DiscordRichPresence;
 
 import java.io.File;
 
@@ -17,8 +20,12 @@ public class Controller {
     FileChooser playFile = new FileChooser();
     File selected;
 
-    public void initialize(){
+    DiscordEventHandlers handlers;
 
+    public void initialize(){
+        DiscordRPC.discordInitialize("690238946378121296", handlers, true);
+        DiscordRichPresence rich = new DiscordRichPresence.Builder("This is the current state.").setDetails("These are some details.").build();
+        DiscordRPC.discordUpdatePresence(rich);
     }
 
     public void setStage(Stage stage) {
