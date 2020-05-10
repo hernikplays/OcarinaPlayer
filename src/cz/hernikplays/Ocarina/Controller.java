@@ -17,6 +17,10 @@ public class Controller {
     FileChooser playFile = new FileChooser();
     File selected;
 
+    public void initialize(){
+
+    }
+
     public void setStage(Stage stage) {
         myStage = stage;
     }
