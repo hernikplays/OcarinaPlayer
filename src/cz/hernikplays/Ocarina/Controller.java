@@ -2,6 +2,8 @@ package cz.hernikplays.Ocarina;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -25,7 +27,11 @@ public class Controller {
 
     @FXML
     public void play(ActionEvent event){
-
+        Alert nofile = new Alert(Alert.AlertType.ERROR, "No file selected", ButtonType.OK);
+        if(selected == null){
+            nofile.show();
+            return;
+        }
         Media hit = new Media(selected.toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
