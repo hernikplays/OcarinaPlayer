@@ -29,7 +29,7 @@
         <AnchorPane prefHeight="48.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
                 <Button layoutY="5.0" mnemonicParsing="false" onAction="#play" prefHeight="50.0" prefWidth="57.0" text="Play" />
-                <Button layoutX="58.0" layoutY="5.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="57.0" text="Pause" />
+            <Button layoutX="57.0" layoutY="5.0" mnemonicParsing="false" onAction="#skip" prefHeight="50.0" prefWidth="57.0" text="Next" />
             </children>
         </AnchorPane>
     </bottom>
