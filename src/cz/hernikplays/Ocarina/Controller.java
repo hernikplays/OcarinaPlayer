@@ -57,15 +57,31 @@ public class Controller {
             nofile.show();
             return;
         }
-        if(mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED){
-            mediaPlayer.play();
+        if(mediaPlayer == null){
+            System.out.println("mediaPlayer null");
         }
         else if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
             mediaPlayer.pause();
+            System.out.println("Pausing...");
+            return;
         }
+        else if(mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED){
+            mediaPlayer.play();
+            System.out.println("Resuming...");
+            return;
+        }
+
         Media hit = new Media(selected.get(fileIndex).toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setOnEndOfMedia(() -> {
+            mediaPlayer.stop();
+            try {
+                skip(event);
+            } catch (InvalidDataException | IOException | UnsupportedTagException e) {
+                e.printStackTrace();
+            }
+        });
         mediaPlayer.play();
 
         Mp3File nowPlaying = new Mp3File(selected.get(fileIndex));
@@ -88,14 +104,37 @@ public class Controller {
         Alert eop = new Alert(Alert.AlertType.ERROR, "End of playlist", ButtonType.OK);
         fileIndex++;
         if(fileIndex == selected.size()){
-         eop.showAndWait();
          fileIndex=0;
          return;
         }
-        if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
+        if(mediaPlayer == null){
+            System.out.println("mediaPlayer null");
+        }
+        else if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
             mediaPlayer.stop();
         }
 
+        play(event);
+    }
+
+    public void prev (ActionEvent event) throws InvalidDataException, IOException, UnsupportedTagException {
+        if(selected == null){
+            System.out.println("Selected is null");
+            return;
+        }
+
+        System.out.println(fileIndex);
+        if(fileIndex == 0){
+            fileIndex=selected.size()-1;
+            return;
+        }
+        fileIndex--;
+        if(mediaPlayer == null){
+            System.out.println("mediaPlayer null");
+        }
+        else if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
+            mediaPlayer.stop();
+        }
         play(event);
     }
 }
