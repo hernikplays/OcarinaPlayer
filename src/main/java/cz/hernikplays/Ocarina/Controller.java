@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -23,6 +24,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class Controller {
+    public Slider volumeSlider;
+    double volumeButSongIsNotPlaying;
     private Stage myStage;
     MediaPlayer mediaPlayer;
     FileChooser playFile = new FileChooser();
@@ -57,15 +60,31 @@ public class Controller {
             nofile.show();
             return;
         }
-        if(mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED){
-            mediaPlayer.play();
+        if(mediaPlayer == null){
+            System.out.println("mediaPlayer null");
         }
         else if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
             mediaPlayer.pause();
+            System.out.println("Pausing...");
+            return;
         }
+        else if(mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED){
+            mediaPlayer.play();
+            System.out.println("Resuming...");
+            return;
+        }
+
         Media hit = new Media(selected.get(fileIndex).toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setOnEndOfMedia(() -> {
+            mediaPlayer.stop();
+            try {
+                skip(event);
+            } catch (InvalidDataException | IOException | UnsupportedTagException e) {
+                e.printStackTrace();
+            }
+        });
         mediaPlayer.play();
 
         Mp3File nowPlaying = new Mp3File(selected.get(fileIndex));
@@ -88,14 +107,49 @@ public class Controller {
         Alert eop = new Alert(Alert.AlertType.ERROR, "End of playlist", ButtonType.OK);
         fileIndex++;
         if(fileIndex == selected.size()){
-         eop.showAndWait();
          fileIndex=0;
          return;
         }
-        if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
+        if(mediaPlayer == null){
+            System.out.println("mediaPlayer null");
+        }
+        else if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
             mediaPlayer.stop();
         }
 
         play(event);
+    }
+
+    public void prev (ActionEvent event) throws InvalidDataException, IOException, UnsupportedTagException {
+        if(selected == null){
+            System.out.println("Selected is null");
+            return;
+        }
+
+        System.out.println(fileIndex);
+        if(fileIndex == 0){
+            fileIndex=selected.size()-1;
+            return;
+        }
+        fileIndex--;
+        if(mediaPlayer == null){
+            System.out.println("mediaPlayer null");
+        }
+        else if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
+            mediaPlayer.stop();
+        }
+        play(event);
+    }
+    @FXML
+    public void changeVolume(){
+        System.out.println(volumeSlider.getValue());
+        if(mediaPlayer == null || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED){
+            volumeButSongIsNotPlaying = volumeSlider.getValue();
+        }
+        else {
+            volumeButSongIsNotPlaying = 0;
+            double value = volumeSlider.getValue();
+            mediaPlayer.setVolume(value);
+        }
     }
 }

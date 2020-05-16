@@ -12,24 +12,17 @@
                         <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
             </menus>
         </MenuBar>
     </top>
     <bottom>
         <AnchorPane prefHeight="48.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <Button layoutY="5.0" mnemonicParsing="false" onAction="#play" prefHeight="50.0" prefWidth="57.0" text="Play" />
-            <Button layoutX="57.0" layoutY="5.0" mnemonicParsing="false" onAction="#skip" prefHeight="50.0" prefWidth="57.0" text="Next" />
+                <Button layoutX="66.0" mnemonicParsing="false" onAction="#play" prefHeight="60.0" prefWidth="66.0" text="Play" />
+            <Button layoutX="132.0" mnemonicParsing="false" onAction="#skip" prefHeight="60.0" prefWidth="66.0" text="Next" />
+            <Button mnemonicParsing="false" onAction="#prev" prefHeight="60.0" prefWidth="66.0" text="Previous" />
+            <Slider fx:id="volumeSlider" blockIncrement="1.0" layoutX="215.0" layoutY="23.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" onMouseReleased="#changeVolume" value="1.0" />
+            <Label layoutX="271.0" layoutY="6.0" text="Volume" />
             </children>
         </AnchorPane>
     </bottom>
