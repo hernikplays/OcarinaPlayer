@@ -17,7 +17,7 @@ using PlaylistsNET.Models;
 using PlaylistsNET.Content;
 using TagLib.Mpeg;
 using System.IO;
-using System.Runtime.CompilerServices;
+using NAudio.Wave;
 using DiscordRPC;
 using DiscordRPC.Logging;
 using System.ComponentModel;
@@ -210,18 +210,13 @@ namespace OcarinaPlayer
 
         public void onPlaybackStop(object sender, EventArgs e, WaveStream reader, DispatcherTimer timer)
         {
-            MessageBox.Show("Playback Stop Fired");
-            playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
-
-            
-
             timer.Stop();
-
-            
 
             if(reader.CurrentTime == reader.TotalTime && player.PlaybackState == PlaybackState.Stopped)
             {
-                MessageBox.Show("Pisnicka skoncila");
+                i++;
+                RoutedEventArgs ee = new RoutedEventArgs();
+                play(sender, ee);
             }
             
             
@@ -236,8 +231,8 @@ namespace OcarinaPlayer
                 i = 0;
                 
             }
-            stop(sender, e);
-            
+            player.Dispose();
+
             play(sender, e);
         }
         private void btnPrev_Click(object sender, RoutedEventArgs e)
@@ -249,8 +244,8 @@ namespace OcarinaPlayer
                 i = file.Count - 1;
                 
             }
-            
-            stop(sender, e);
+
+            player.Dispose();
             
             play(sender, e);
         }
@@ -271,18 +266,7 @@ namespace OcarinaPlayer
             SaveFileDialog savefile = new SaveFileDialog();
             savefile.Filter = "Playlist Files|*.m3u;";
             savefile.FileName = "MyPlaylist.m3u";
-            if (savefile.ShowDialog() == true)
-            {
-                MessageBox.Show(savefile.FileName);
-
-            }
-            else
-            {
-                MessageBox.Show("An Error occured");
-                return;
-            }
             
-
             List<TagLib.File> filesToRead = new List<TagLib.File>();
 
             foreach (string files in file)
@@ -340,5 +324,10 @@ namespace OcarinaPlayer
             client.Dispose();
         }
 
+        private void volumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            float vol = Convert.ToSingle(volumeSlider.Value);
+            player.Volume = vol;
+        }
     }
 }
