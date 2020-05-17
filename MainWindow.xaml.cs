@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-using NAudio.Wave;
 using PlaylistsNET.Models;
 using PlaylistsNET.Content;
 using TagLib.Mpeg;
@@ -191,6 +190,7 @@ namespace OcarinaPlayer
                 aTimer.Start();
 
                 player.PlaybackStopped += (sende, e2) => onPlaybackStop(sender, e, mainOutputStream, aTimer); //function to launch when playback stops
+                
             }
         }
 
@@ -210,11 +210,16 @@ namespace OcarinaPlayer
 
         public void onPlaybackStop(object sender, EventArgs e, WaveStream reader, DispatcherTimer timer)
         {
+            MessageBox.Show("Playback Stop Fired");
             playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
+
+            
 
             timer.Stop();
 
-            if(reader.CurrentTime == reader.TotalTime)
+            
+
+            if(reader.CurrentTime == reader.TotalTime && player.PlaybackState == PlaybackState.Stopped)
             {
                 MessageBox.Show("Pisnicka skoncila");
             }
