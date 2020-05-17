@@ -108,8 +108,9 @@
                             <goal>launch4j</goal>
                         </goals>
                         <configuration>
-                            <headerType>gui</headerType>
+                            <headerType>console</headerType>
                             <jar>${project.build.directory}/${artifactId}-${version}-shaded.jar</jar>
+                            <cmdLine>--module-path ./javafx/lib</cmdLine>
                             <outfile>${project.build.directory}/ocarina.exe</outfile>
                             <downloadUrl>http://java.com/download</downloadUrl>
                             <classPath>
@@ -120,6 +121,8 @@
                             <jre>
                                 <path>./jre</path>
                                 <bundledJre64Bit>true</bundledJre64Bit>
+                                <bundledJreAsFallback>false</bundledJreAsFallback>
+                                <jdkPreference>preferJdk</jdkPreference>
                             </jre>
                             <versionInfo>
                                 <fileVersion>0.1.0.0</fileVersion>
