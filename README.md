@@ -4,4 +4,4 @@
 
 Simple C# music player
 
-Track what's currently implemented [here](https://github.com/hernikplays/OcarinaPlayer/projects/1) and request feature/submit issues [here](https://github.com/hernikplays/OcarinaPlayer/issues/new/choose).
+Track what's currently implemented [here](https://github.com/hernikplays/OcarinaPlayer/projects/1) and request feature/submit issues [here](https://issues.hernikplays.cz/youtrack/projects/01479671-2c3b-4507-902e-cbac46a09e8f).
