@@ -1,6 +1,6 @@
 # OcarinaPlayer
 
-[![Liberapay Patrons](http://img.shields.io/liberapay/patrons/hernikplays.svg?logo=liberapay)](https://liberapay.com/hernikplays)
+[![Buymeacoffee Button](https://cdn.buymeacoffee.com/buttons/default-blue.png)](https://buymeacoff.ee/hernikplays)
 
 Simple C# music player
 
