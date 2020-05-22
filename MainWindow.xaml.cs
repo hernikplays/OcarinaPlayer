@@ -70,7 +70,7 @@ namespace OcarinaPlayer
 
             });
         }
-
+        
         private WaveOutEvent player = new WaveOutEvent();
         private List<string> file = new List<string>();
         public int i = 0;
@@ -126,7 +126,6 @@ namespace OcarinaPlayer
                     }
 
                 });
-                playBtn.Source = new BitmapImage(new Uri("assets/img/play.png", UriKind.Relative));
             }
             else if(player.PlaybackState == PlaybackState.Paused)
             {
@@ -145,7 +144,7 @@ namespace OcarinaPlayer
 
                 });
                 
-                playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative));
+                
             }
             
             else { 
@@ -156,7 +155,7 @@ namespace OcarinaPlayer
                 player.Init(volumeStream); //Initialize WaveChannel
 
                 
-                playBtn.Source = new BitmapImage(new Uri("assets/img/pause.png", UriKind.Relative)); //change button image
+                
 
                 var playing = TagLib.File.Create(file[i]);
                 client.SetPresence(new RichPresence()
@@ -329,5 +328,6 @@ namespace OcarinaPlayer
             float vol = Convert.ToSingle(volumeSlider.Value);
             player.Volume = vol;
         }
+        
     }
 }
