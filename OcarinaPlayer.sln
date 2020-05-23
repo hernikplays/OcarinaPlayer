@@ -9,10 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{968D61
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{E36C6ABC-39EA-4C72-9116-2C0F3B8BCE1E}"
 	ProjectSection(SolutionItems) = preProject
-		assets\img\next.png = assets\img\next.png
-		assets\img\pause.png = assets\img\pause.png
-		assets\img\play.png = assets\img\play.png
-		assets\img\prev.png = assets\img\prev.png
+		assets\img\noalbum.png = assets\img\noalbum.png
 	EndProjectSection
 EndProject
 Global

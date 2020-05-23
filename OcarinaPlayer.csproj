@@ -132,6 +132,7 @@
     <Content Include="assets/img/**/*.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="noalbum.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\MaterialDesignThemes.3.1.2\build\MaterialDesignThemes.targets" Condition="Exists('packages\MaterialDesignThemes.3.1.2\build\MaterialDesignThemes.targets')" />

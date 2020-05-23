@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using PlaylistsNET.Models;
 using PlaylistsNET.Content;
@@ -114,6 +113,24 @@ namespace OcarinaPlayer
             {
                 player.Pause(); //pause
                 var playing = TagLib.File.Create(file[i]);
+                
+                if (playing.Tag.Title.Length == 0 || playing.Tag.Title == null)
+                {
+                    var filename = Path.GetFileName(file[i]);
+                    client.SetPresence(new RichPresence()
+                    {
+
+                        Details = "Listening to " + filename,
+                        State = "Paused",
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = "rpcon",
+                            LargeImageText = "Ocarina Music Player"
+                        }
+
+                    });
+                }
+                else { 
                 client.SetPresence(new RichPresence()
                 {
 
@@ -126,23 +143,42 @@ namespace OcarinaPlayer
                     }
 
                 });
+                }
             }
             else if(player.PlaybackState == PlaybackState.Paused)
             {
                 player.Play(); //resume
                 var playing = TagLib.File.Create(file[i]);
-                client.SetPresence(new RichPresence()
+                if (playing.Tag.Title.Length == 0 || playing.Tag.Title == null)
                 {
-                    Details = "Listening to " + playing.Tag.Title,
-                    State = "by " + playing.Tag.FirstPerformer,
-                    Timestamps = Timestamps.Now,
-                    Assets = new Assets()
+                    var filename = Path.GetFileName(file[i]);
+                    client.SetPresence(new RichPresence()
                     {
-                        LargeImageKey = "rpcon",
-                        LargeImageText = "Ocarina Music Player"
-                    }
+                        Details = "Listening to " + filename,
+                        Timestamps = Timestamps.Now,
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = "rpcon",
+                            LargeImageText = "Ocarina Music Player"
+                        }
 
-                });
+                    });
+                }
+                else {
+                    client.SetPresence(new RichPresence()
+                    {
+                        Details = "Listening to " + playing.Tag.Title,
+                        State = "by " + playing.Tag.FirstPerformer,
+                        Timestamps = Timestamps.Now,
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = "rpcon",
+                            LargeImageText = "Ocarina Music Player"
+                        }
+
+                    });
+                }
+                
                 
                 
             }
@@ -158,11 +194,12 @@ namespace OcarinaPlayer
                 
 
                 var playing = TagLib.File.Create(file[i]);
+                MessageBox.Show(playing.Tag.Title);
                 client.SetPresence(new RichPresence()
                 {
                     Details = "Listening to " +playing.Tag.Title,
                     State = "by "+playing.Tag.FirstPerformer,
-                    Timestamps = Timestamps.FromTimeSpan(mainOutputStream.CurrentTime),
+                    Timestamps = Timestamps.Now,
                     Assets = new Assets()
                     {
                         LargeImageKey = "rpcon",
@@ -213,9 +250,18 @@ namespace OcarinaPlayer
 
             if(reader.CurrentTime == reader.TotalTime && player.PlaybackState == PlaybackState.Stopped)
             {
+                
                 i++;
+                if(i > file.Count - 1) {
+                    i = 0;
                 RoutedEventArgs ee = new RoutedEventArgs();
                 play(sender, ee);
+                }
+                else
+                {
+                    RoutedEventArgs ee = new RoutedEventArgs();
+                    play(sender, ee);
+                }
             }
             
             
