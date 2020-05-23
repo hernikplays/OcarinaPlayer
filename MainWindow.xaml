@@ -49,6 +49,6 @@
         </Grid>
         <Image HorizontalAlignment="Left" Height="182" Margin="10,166,0,0" VerticalAlignment="Top" Width="182" Grid.Column="0" Grid.Row="0" Name="albumArt"/>
         <Label Content="00:00" Width="96" HorizontalAlignment="Left" Margin="123,379,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="18"/>
-        <Slider HorizontalAlignment="Left" Margin="197,379,0,0" VerticalAlignment="Top" Width="192" Grid.Column="0" Grid.Row="0" Name="volumeSlider" ValueChanged="volumeSlider_ValueChanged" Maximum="1" LargeChange="0.5" Value="1"/>
+        <Slider HorizontalAlignment="Left" Margin="189,384,0,0" VerticalAlignment="Top" Width="192" Grid.Column="0" Grid.Row="0" Name="volumeSlider" ValueChanged="volumeSlider_ValueChanged" Maximum="1" LargeChange="0.5" Value="1"/>
     </Grid>
 </Window>
