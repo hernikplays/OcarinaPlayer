@@ -76,6 +76,7 @@ namespace OcarinaPlayer
 
         private void openFile(object sender, RoutedEventArgs e)
         {
+            // OPEN AND LOAD FILES
             OpenFileDialog open = new OpenFileDialog();
             open.Multiselect = true; //multiple fileselect
             open.Filter = "Audio File|*.mp3;";
@@ -99,6 +100,7 @@ namespace OcarinaPlayer
         }
         private void play(object sender, RoutedEventArgs e)
         {
+            // PLAY FUNCTION
             if(!file.Any())
             {
                  MessageBox.Show("You need to open a file first");
