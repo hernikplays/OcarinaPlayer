@@ -15,7 +15,7 @@
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="{DynamicResource MaterialDesignFont}" Height="732" Width="1280">
+     FontFamily="{DynamicResource MaterialDesignFont}" Height="732" Width="1000">
 
     <Grid>
         <Grid VerticalAlignment="Top">
@@ -30,12 +30,22 @@
             </Menu>
         </Grid>
         <Grid VerticalAlignment="Bottom" Height="392" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
             <Image HorizontalAlignment="Left" Height="254" Margin="10,47,0,0" VerticalAlignment="Top" Width="252" Grid.Column="0" Grid.Row="0" Name="albumArt" Source="noalbum.png"/>
-            <Label Content="00:00" Width="96" HorizontalAlignment="Left" Margin="128,352,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="18"/>
-            <Slider HorizontalAlignment="Left" Margin="205,358,0,0" VerticalAlignment="Top" Width="192" Grid.Column="0" Grid.Row="0" Name="volumeSlider" ValueChanged="volumeSlider_ValueChanged" Maximum="1" LargeChange="0.5" Value="1"/>
+            <Label Content="00:00" Width="96" HorizontalAlignment="Left" Margin="173,352,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="18"/>
 
-            <Grid Height="36" VerticalAlignment="Bottom" Width="113" HorizontalAlignment="Left" Margin="10,0,0,10">
+
+            <Label  Height="35" Margin="10,306,1062,51">
+                <TextBlock FontSize="18" Name="artistSong" TextWrapping="Wrap"/>
+            </Label>
+
+            <Slider HorizontalAlignment="Left" Margin="330,352,0,0" VerticalAlignment="Top" Width="192" Grid.Column="0" Grid.Row="0" Name="volumeSlider" ValueChanged="volumeSlider_ValueChanged" Maximum="1" LargeChange="0.5" Value="1"/>
+
+            <Grid Height="36" VerticalAlignment="Bottom" Width="158" HorizontalAlignment="Left" Margin="10,0,0,10">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="37"></ColumnDefinition>
                     <ColumnDefinition Width="37"></ColumnDefinition>
                     <ColumnDefinition Width="37"></ColumnDefinition>
                     <ColumnDefinition Width="37"></ColumnDefinition>
@@ -47,10 +57,13 @@
                     <materialDesign:PackIcon Kind="SkipPrevious" Foreground="Black" Width="30" Height="30" />
                 </Button>
                 <Button Padding="0" Grid.Column="1" Grid.Row="0"  Click="play" Height="35" Width="35" VerticalAlignment="Bottom" HorizontalAlignment="Left">
-                    <materialDesign:PackIcon Kind="PlayArrow" Foreground="Black" Width="30" Height="30" />
+                    <materialDesign:PackIcon Kind="PlayArrow" Foreground="Black" Width="30" Height="30" Name="playButton" />
                 </Button>
                 <Button Padding="0" Grid.Column="2" Grid.Row="0" Width="35" Click="btnNext_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="35" >
                     <materialDesign:PackIcon Kind="SkipNext" Foreground="Black" Width="30" Height="30" />
+                </Button>
+                <Button Padding="0" Grid.Column="3" Grid.Row="0" Width="35" Click="shuffle_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="35" Name="shuffle">
+                    <materialDesign:PackIcon Kind="Shuffle" Foreground="Black" Width="30" Height="30" />
                 </Button>
             </Grid>
 

@@ -21,6 +21,7 @@ using DiscordRPC;
 using DiscordRPC.Logging;
 using System.ComponentModel;
 using System.Windows.Threading;
+using MaterialDesignThemes.Wpf;
 
 namespace OcarinaPlayer
 {
@@ -72,11 +73,22 @@ namespace OcarinaPlayer
         
         private WaveOutEvent player = new WaveOutEvent();
         private List<string> file = new List<string>();
+        private List<string> unshuffledPL = new List<string>();
         public int i = 0;
+        public bool loop = false;
+        private bool shufflePL = false;
 
         private void openFile(object sender, RoutedEventArgs e)
         {
             // OPEN AND LOAD FILES
+            if(shufflePL == true)
+            {
+                shufflePL = false;
+                unshuffledPL.Clear();
+                Color color = (Color)ColorConverter.ConvertFromString("#1eb6ff");
+                shuffle.Background = new SolidColorBrush(color);
+
+            }
             OpenFileDialog open = new OpenFileDialog();
             open.Multiselect = true; //multiple fileselect
             open.Filter = "Audio File|*.mp3;";
@@ -114,9 +126,10 @@ namespace OcarinaPlayer
             if (player.PlaybackState == PlaybackState.Playing)
             {
                 player.Pause(); //pause
+                playButton.Kind = PackIconKind.PlayArrow;
                 var playing = TagLib.File.Create(file[i]);
                 
-                if (playing.Tag.Title.Length == 0 || playing.Tag.Title == null)
+                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
                 {
                     var filename = Path.GetFileName(file[i]);
                     client.SetPresence(new RichPresence()
@@ -150,6 +163,7 @@ namespace OcarinaPlayer
             else if(player.PlaybackState == PlaybackState.Paused)
             {
                 player.Play(); //resume
+                playButton.Kind = PackIconKind.Pause;
                 var playing = TagLib.File.Create(file[i]);
                 if (playing.Tag.Title.Length == 0 || playing.Tag.Title == null)
                 {
@@ -189,39 +203,61 @@ namespace OcarinaPlayer
             
                 volumeStream.PadWithZeroes = false; //https://stackoverflow.com/a/11280383
 
-
                 player.Init(volumeStream); //Initialize WaveChannel
 
-                
-                
-
                 var playing = TagLib.File.Create(file[i]);
-                MessageBox.Show(playing.Tag.Title);
-                client.SetPresence(new RichPresence()
+                //MessageBox.Show(playing.Tag.Title);
+
+                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0 )
                 {
-                    Details = "Listening to " +playing.Tag.Title,
-                    State = "by "+playing.Tag.FirstPerformer,
-                    Timestamps = Timestamps.Now,
-                    Assets = new Assets()
+                    var filename = Path.GetFileName(file[i]);
+                    client.SetPresence(new RichPresence()
                     {
-                        LargeImageKey = "rpcon",
-                        LargeImageText = "Ocarina Music Player"
+                        Details = "Listening to " + filename,
+                        Timestamps = Timestamps.Now,
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = "rpcon",
+                            LargeImageText = "Ocarina Music Player"
+                        }
 
-                    }
+                    });
 
-                });
+                    artistSong.Text = filename;
+                }
+                else
+                {
+                    client.SetPresence(new RichPresence()
+                    {
+                        Details = "Listening to " + playing.Tag.Title,
+                        State = "by " + playing.Tag.FirstPerformer,
+                        Timestamps = Timestamps.Now,
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = "rpcon",
+                            LargeImageText = "Ocarina Music Player"
+                        }
 
-                if(playing.Tag.Pictures.Length >= 1)
+                    });
+                    artistSong.Text = playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
+                }
+
+                if (playing.Tag.Pictures.Length >= 1)
                 {
                     MemoryStream stream = new MemoryStream(playing.Tag.Pictures[0].Data.Data);
                     BitmapFrame bmp = BitmapFrame.Create(stream);
                     albumArt.Source = bmp;
                 }
+                else
+                {
+                    albumArt.Source = new BitmapImage(new Uri("assets/img/noalbum.png", UriKind.Relative));
+                }
+                
 
                 
 
                 player.Play(); //play
-
+                playButton.Kind = PackIconKind.Pause;
                 var aTimer = new DispatcherTimer();
                 aTimer.Tick += (sende, e2) => updateSec(sender, e, mainOutputStream);
                 aTimer.Interval = new TimeSpan(0, 0, 1);
@@ -256,8 +292,10 @@ namespace OcarinaPlayer
                 i++;
                 if(i > file.Count - 1) {
                     i = 0;
+                    if(loop == true) { 
                 RoutedEventArgs ee = new RoutedEventArgs();
                 play(sender, ee);
+                    }
                 }
                 else
                 {
@@ -376,6 +414,26 @@ namespace OcarinaPlayer
             float vol = Convert.ToSingle(volumeSlider.Value);
             player.Volume = vol;
         }
-        
+
+        private void shuffle_Click(object sender, RoutedEventArgs e)
+        {
+            if(shufflePL == false)
+            {
+                i = 0;
+                shufflePL = true;
+                unshuffledPL = file;
+                file.Shuffle();
+                Color color = (Color)ColorConverter.ConvertFromString("#3594ff");
+                shuffle.Background = new SolidColorBrush(color);
+            }
+            else
+            {
+                shufflePL = false;
+                file = unshuffledPL;
+                unshuffledPL.Clear();
+                Color color = (Color)ColorConverter.ConvertFromString("#1eb6ff");
+                shuffle.Background = new SolidColorBrush(color);
+            }
+        }
     }
 }
