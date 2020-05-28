@@ -94,24 +94,31 @@ namespace OcarinaPlayer
             open.Filter = "Audio File|*.mp3;";
             if (open.ShowDialog() == true)
             {
-                MessageBox.Show(open.FileName);
+                
 
                 file.Clear();
 
                 foreach (string files in open.FileNames)
                 {
                     file.Add(files); //saves all files into list
+                    var playing = TagLib.File.Create(files);
+                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                    {
+                        var filename = Path.GetFileName(files);
+                        Playlist.Items.Add(filename);
+                    }
+                    else
+                    {
+                        Playlist.Items.Add(playing.Tag.FirstPerformer + " - " + playing.Tag.Title);
+                    }
                 }
                 
             }
-            else
-            {
-                MessageBox.Show("An Error occured");
-                return;
-            }
+            
         }
         private void play(object sender, RoutedEventArgs e)
         {
+            
             // PLAY FUNCTION
             if(!file.Any())
             {
@@ -165,7 +172,7 @@ namespace OcarinaPlayer
                 player.Play(); //resume
                 playButton.Kind = PackIconKind.Pause;
                 var playing = TagLib.File.Create(file[i]);
-                if (playing.Tag.Title.Length == 0 || playing.Tag.Title == null)
+                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
                 {
                     var filename = Path.GetFileName(file[i]);
                     client.SetPresence(new RichPresence()
@@ -206,7 +213,8 @@ namespace OcarinaPlayer
                 player.Init(volumeStream); //Initialize WaveChannel
 
                 var playing = TagLib.File.Create(file[i]);
-                //MessageBox.Show(playing.Tag.Title);
+                
+
 
                 if (playing.Tag.Title == null || playing.Tag.Title.Length == 0 )
                 {
@@ -429,11 +437,25 @@ namespace OcarinaPlayer
             else
             {
                 shufflePL = false;
+                i = unshuffledPL.IndexOf(file[i]);
+                file.Clear(); 
                 file = unshuffledPL;
                 unshuffledPL.Clear();
                 Color color = (Color)ColorConverter.ConvertFromString("#1eb6ff");
                 shuffle.Background = new SolidColorBrush(color);
             }
         }
+
+        private void Playlist_Click(object sender, MouseButtonEventArgs e)
+        {
+            var item = ItemsControl.ContainerFromElement(Playlist, e.OriginalSource as DependencyObject) as ListBoxItem;
+            if (item != null)
+            {
+                i = Playlist.SelectedIndex - 1;
+                RoutedEventArgs ar = new RoutedEventArgs();
+                btnNext_Click(sender,ar);
+            }
+        }
+
     }
 }
