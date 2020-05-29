@@ -43,7 +43,7 @@ h1,h2,p{
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin-bottom: 10px;
+
   }
   #dl:hover{
       cursor: pointer;
@@ -57,3 +57,6 @@ h1,h2,p{
       font-family: 'Roboto', sans-serif;
       margin-top: -15px;
   }
+a{
+        margin-bottom: 10px;
+}
