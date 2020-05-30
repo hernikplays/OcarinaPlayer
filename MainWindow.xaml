@@ -15,7 +15,7 @@
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="{DynamicResource MaterialDesignFont}" Height="732" Width="1000">
+     FontFamily="{DynamicResource MaterialDesignFont}" Height="721.5" Width="1000">
 
     <Grid>
         <Grid VerticalAlignment="Top">
@@ -33,7 +33,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox HorizontalAlignment="Left" Height="701" Margin="0,0,-77,0" VerticalAlignment="Top" Width="246" Name="Playlist" MouseLeftButtonUp="Playlist_Click">
+            <ListBox HorizontalAlignment="Left" Height="264" Margin="-732,44,0,0" VerticalAlignment="Top" Width="246" Name="Playlist" MouseLeftButtonUp="Playlist_Click">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding}" FontSize="20"/>
