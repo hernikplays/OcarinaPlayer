@@ -46,7 +46,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Image HorizontalAlignment="Left" Height="254" Margin="10,35,0,0" VerticalAlignment="Top" Width="252" Grid.Column="0" Grid.Row="0" Name="albumArt" Source="noalbum.png"/>
+            <Image HorizontalAlignment="Left" Height="254" Margin="10,35,0,0" VerticalAlignment="Top" Width="252" Grid.Column="0" Grid.Row="0" Name="albumArt" Source="./assets/img/noalbum.png"/>
             <Label Content="00:00" Width="96" HorizontalAlignment="Left" Margin="211,345,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="23"/>
 
 
