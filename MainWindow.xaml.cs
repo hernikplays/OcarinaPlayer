@@ -118,7 +118,7 @@ namespace OcarinaPlayer
         }
         private void play(object sender, RoutedEventArgs e)
         {
-            
+
             // PLAY FUNCTION
             if(!file.Any())
             {
@@ -283,8 +283,9 @@ namespace OcarinaPlayer
             int ss = mainOutputStream.CurrentTime.Seconds;
 
             var thetime = mainOutputStream.CurrentTime.ToString("mm\\:ss");
+            var totaltime = mainOutputStream.TotalTime.ToString("mm\\:ss");
             // Updating the Label which displays the current second
-            cas.Content = thetime;
+            cas.Content = thetime + " / " + totaltime;
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
@@ -427,6 +428,7 @@ namespace OcarinaPlayer
         {
             if(shufflePL == false)
             {
+                unshuffledPL.Clear();
                 i = 0;
                 shufflePL = true;
                 unshuffledPL = file;
@@ -438,9 +440,8 @@ namespace OcarinaPlayer
             {
                 shufflePL = false;
                 i = unshuffledPL.IndexOf(file[i]);
-                file.Clear(); 
+                //file.Clear(); 
                 file = unshuffledPL;
-                unshuffledPL.Clear();
                 Color color = (Color)ColorConverter.ConvertFromString("#1eb6ff");
                 shuffle.Background = new SolidColorBrush(color);
             }

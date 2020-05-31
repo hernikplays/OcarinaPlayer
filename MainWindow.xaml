@@ -15,7 +15,7 @@
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="{DynamicResource MaterialDesignFont}" Height="721.5" Width="1000">
+     FontFamily="{DynamicResource MaterialDesignFont}" Height="732" Width="1000">
 
     <Grid>
         <Grid VerticalAlignment="Top">
@@ -29,11 +29,11 @@
                 </MenuItem>
             </Menu>
         </Grid>
-        <Grid HorizontalAlignment="Right" Width="246">
+        <Grid HorizontalAlignment="Right" Width="249" Margin="0,32,733,397">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox HorizontalAlignment="Left" Height="264" Margin="-732,44,0,0" VerticalAlignment="Top" Width="246" Name="Playlist" MouseLeftButtonUp="Playlist_Click">
+            <ListBox HorizontalAlignment="Left" Height="252" Margin="0,10,-240,0" VerticalAlignment="Top" Width="246" Name="Playlist" MouseLeftButtonUp="Playlist_Click">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding}" FontSize="20"/>
@@ -46,15 +46,15 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Image HorizontalAlignment="Left" Height="254" Margin="10,35,0,0" VerticalAlignment="Top" Width="252" Grid.Column="0" Grid.Row="0" Name="albumArt" Source="./assets/img/noalbum.png"/>
-            <Label Content="00:00" Width="96" HorizontalAlignment="Left" Margin="211,345,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="23"/>
+            <Image HorizontalAlignment="Left" Height="254" Margin="10,0,0,0" VerticalAlignment="Top" Width="252" Grid.Column="0" Grid.Row="0" Name="albumArt" Source="./assets/img/noalbum.png"/>
+            <Label Content="00:00" Width="182" HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="21" Height="33"/>
 
 
-            <Label  Height="35" Margin="10,294,1062,63">
-                <TextBlock FontSize="18" Name="artistSong" TextWrapping="Wrap"/>
+            <Label  Height="35" Margin="10,262,1062,103">
+                <TextBlock FontSize="19" Name="artistSong" TextWrapping="Wrap" Text="Click 'File > Open' to pick songs..."/>
             </Label>
-
-            <Slider HorizontalAlignment="Left" Margin="293,353,0,0" VerticalAlignment="Top" Width="192" Grid.Column="0" Grid.Row="0" Name="volumeSlider" ValueChanged="volumeSlider_ValueChanged" Maximum="1" LargeChange="0.5" Value="1"/>
+            <materialDesign:PackIcon Grid.Row="0" Grid.Column="0" Kind="VolumeSource" Width="30" Height="30" Margin="205,347,0,0"></materialDesign:PackIcon>
+            <Slider HorizontalAlignment="Left" Margin="240,353,0,0" VerticalAlignment="Top" Width="146" Grid.Column="0" Grid.Row="0" Name="volumeSlider" ValueChanged="volumeSlider_ValueChanged" Maximum="1" LargeChange="0.5" Value="1"/>
 
             <Grid Height="55" VerticalAlignment="Bottom" Width="196" HorizontalAlignment="Left" Margin="10,0,0,10">
                 <Grid.ColumnDefinitions>
