@@ -1,5 +1,5 @@
 html,body {
-    background-color: #3d3d3d;
+    background-color: #1eb6ff;
     height: 100%;
     margin: 0;
 }
@@ -57,6 +57,4 @@ h1,h2,p{
       font-family: 'Roboto', sans-serif;
       margin-top: -15px;
   }
-iframe{
-    margin-top: 20px;
-}
+
