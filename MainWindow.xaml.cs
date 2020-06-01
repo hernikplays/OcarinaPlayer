@@ -39,6 +39,7 @@ namespace OcarinaPlayer
         }
         private void OnLoad(object sender, RoutedEventArgs e)
         {
+            seekbar.IsEnabled = false;
             //Set the logger
             client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
 
@@ -201,9 +202,6 @@ namespace OcarinaPlayer
 
                     });
                 }
-                
-                
-                
             }
             
             else { 
@@ -270,6 +268,8 @@ namespace OcarinaPlayer
                 aTimer.Tick += (sende, e2) => updateSec(sender, e, mainOutputStream);
                 aTimer.Interval = new TimeSpan(0, 0, 1);
                 aTimer.Start();
+
+                seekbar.IsEnabled = true;
 
                 player.PlaybackStopped += (sende, e2) => onPlaybackStop(sender, e, mainOutputStream, aTimer); //function to launch when playback stops
                 
@@ -458,5 +458,9 @@ namespace OcarinaPlayer
             }
         }
 
+        private void seekbar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
     }
 }
