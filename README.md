@@ -4,7 +4,7 @@
 
 Simple C# music player
 
-[![Discord](https://img.shields.io/discord/713398388187594824?color=%237289DA&label=join%20the%20discord)](https://discord.gg/d49tm9V) ![GitHub All Releases](https://img.shields.io/github/downloads/hernikplays/OcarinaPlayer/total)
+![GitHub All Releases](https://img.shields.io/github/downloads/hernikplays/OcarinaPlayer/total)
 
 Track what's currently implemented [here](https://github.com/hernikplays/OcarinaPlayer/projects/1) and request feature/submit issues [here](https://github.com/hernikplays/OcarinaPlayer/issues).
 
