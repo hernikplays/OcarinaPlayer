@@ -270,6 +270,11 @@ namespace OcarinaPlayer
                 aTimer.Start();
 
                 seekbar.IsEnabled = true;
+                int mm = mainOutputStream.TotalTime.Minutes;
+                int ss = mainOutputStream.TotalTime.Seconds;
+                int mintosec = mm * 60;
+                int seekbarSec = mintosec + ss;
+                seekbar.Maximum = seekbarSec;
 
                 player.PlaybackStopped += (sende, e2) => onPlaybackStop(sender, e, mainOutputStream, aTimer); //function to launch when playback stops
                 
@@ -281,6 +286,11 @@ namespace OcarinaPlayer
             int hh = mainOutputStream.CurrentTime.Hours;
             int mm = mainOutputStream.CurrentTime.Minutes;
             int ss = mainOutputStream.CurrentTime.Seconds;
+            int mintosec = mm * 60;
+            int seekbarSec = mintosec + ss;
+
+           
+            seekbar.Value = seekbarSec;
 
             var thetime = mainOutputStream.CurrentTime.ToString("mm\\:ss");
             var totaltime = mainOutputStream.TotalTime.ToString("mm\\:ss");
@@ -462,5 +472,7 @@ namespace OcarinaPlayer
         {
 
         }
+
+       
     }
 }

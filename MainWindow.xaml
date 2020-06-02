@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OcarinaPlayer"
         mc:Ignorable="d"
-        Title="Ocarina" MinWidth="800" MinHeight="450"
+        Title="Ocarina" MinWidth="1000" MinHeight="450"
         Loaded="OnLoad"
         SizeToContent="WidthAndHeight"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -759,19 +759,14 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Image HorizontalAlignment="Left" Height="254" Margin="10,0,0,0" VerticalAlignment="Top" Width="252" Grid.Column="0" Grid.Row="0" Name="albumArt" Source="./assets/img/noalbum.png"/>
-            <Label Content="00:00" Width="182" HorizontalAlignment="Left" Margin="10,298,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="21" Height="33"/>
-
+            <Label Content="00:00" Width="182" HorizontalAlignment="Left" Margin="53,294,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Name="cas" FontSize="21" Height="33"/>
 
             <Label  Height="35" Margin="10,262,1062,103">
                 <TextBlock FontSize="19" Name="artistSong" TextWrapping="Wrap" Text="Click 'File > Open' to pick songs..."/>
             </Label>
             <materialDesign:PackIcon Grid.Row="0" Grid.Column="0" Kind="VolumeSource" Width="30" Height="30" Margin="205,347,0,0"></materialDesign:PackIcon>
             <Slider HorizontalAlignment="Left" Margin="240,353,0,0" VerticalAlignment="Top" Width="197" Grid.Column="0" Grid.Row="0" Name="volumeSlider" ValueChanged="volumeSlider_ValueChanged" Maximum="1" LargeChange="0.1" Value="1"/>
-
-            
-                <Slider Margin="560,352,454,21" Width="346" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0" Name="seekbar" ValueChanged="seekbar_ValueChanged" Maximum="1" LargeChange="0.1" Value="0" Style="{StaticResource seekbar}" IsMoveToPointEnabled="True"/>
-            
-
+            <Slider Grid.Column="0" Grid.Row="0" Name="seekbar" ValueChanged="seekbar_ValueChanged" Maximum="1" LargeChange="0.1" Value="0" Style="{StaticResource seekbar}" IsMoveToPointEnabled="True" Margin="20,318,1098,50" />
             <Grid Height="55" VerticalAlignment="Bottom" Width="196" HorizontalAlignment="Left" Margin="10,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="45"></ColumnDefinition>
