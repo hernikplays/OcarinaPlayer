@@ -307,20 +307,21 @@ namespace OcarinaPlayer
             {
                 
                 i++;
+                MessageBox.Show(i.ToString());
                 if(i > file.Count - 1) {
                     i = 0;
-                    if(loop == true) { 
+                    if(loop == true) {
+                            
                 RoutedEventArgs ee = new RoutedEventArgs();
                 play(sender, ee);
                     }
                 }
                 else
                 {
-                        if (loop == true)
-                        {
-                            RoutedEventArgs ee = new RoutedEventArgs();
-                            play(sender, ee);
-                        }
+                      
+                 RoutedEventArgs ee = new RoutedEventArgs();
+                 play(sender, ee);
+                        
                 }
              }
             }
