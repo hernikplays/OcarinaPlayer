@@ -307,7 +307,6 @@ namespace OcarinaPlayer
             {
                 
                 i++;
-                MessageBox.Show(i.ToString());
                 if(i > file.Count - 1) {
                     i = 0;
                     if(loop == true) {
