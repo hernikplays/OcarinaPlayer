@@ -75,9 +75,12 @@ namespace OcarinaPlayer
         private WaveOutEvent player = new WaveOutEvent();
         private List<string> file = new List<string>();
         private List<string> unshuffledPL = new List<string>();
+        WaveStream mainOutputStream;
+        DispatcherTimer aTimer;
         public int i = 0;
         public bool loop = false;
         private bool shufflePL = false;
+        private bool reposition = false;
 
         private void openFile(object sender, RoutedEventArgs e)
         {
@@ -95,10 +98,6 @@ namespace OcarinaPlayer
             open.Filter = "Audio File|*.mp3;";
             if (open.ShowDialog() == true)
             {
-                
-
-                file.Clear();
-
                 foreach (string files in open.FileNames)
                 {
                     file.Add(files); //saves all files into list
@@ -127,7 +126,7 @@ namespace OcarinaPlayer
                 return;
             }
 
-            WaveStream mainOutputStream = new Mp3FileReader(file[i]); //plays item from selected music
+            mainOutputStream = new Mp3FileReader(file[i]); //plays item from selected music
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
 
             
@@ -259,17 +258,15 @@ namespace OcarinaPlayer
                     albumArt.Source = new BitmapImage(new Uri("assets/img/noalbum.png", UriKind.Relative));
                 }
                 
-
-                
-
                 player.Play(); //play
                 playButton.Kind = PackIconKind.Pause;
-                var aTimer = new DispatcherTimer();
+                aTimer = new DispatcherTimer();
                 aTimer.Tick += (sende, e2) => updateSec(sender, e, mainOutputStream);
                 aTimer.Interval = new TimeSpan(0, 0, 1);
                 aTimer.Start();
 
                 seekbar.IsEnabled = true;
+                seekbar.Value = 0;
                 int mm = mainOutputStream.TotalTime.Minutes;
                 int ss = mainOutputStream.TotalTime.Seconds;
                 int mintosec = mm * 60;
@@ -303,6 +300,7 @@ namespace OcarinaPlayer
 
         public void onPlaybackStop(object sender, EventArgs e, WaveStream reader, DispatcherTimer timer)
         {
+            if(reposition == false) { 
             timer.Stop();
 
             if(reader.CurrentTime == reader.TotalTime && player.PlaybackState == PlaybackState.Stopped)
@@ -318,12 +316,15 @@ namespace OcarinaPlayer
                 }
                 else
                 {
-                    RoutedEventArgs ee = new RoutedEventArgs();
-                    play(sender, ee);
+                        if (loop == true)
+                        {
+                            RoutedEventArgs ee = new RoutedEventArgs();
+                            play(sender, ee);
+                        }
                 }
+             }
             }
-            
-            
+
         }
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
@@ -468,11 +469,31 @@ namespace OcarinaPlayer
             }
         }
 
-        private void seekbar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void seekbar_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-
+            reposition = true;
+            player.Stop();
+            TimeSpan tomove = new TimeSpan(0, (int)(Math.Floor(seekbar.Value / 60)), (int)(Math.Floor(seekbar.Value % 60)));
+            mainOutputStream.CurrentTime = tomove;
+            player.Play();
+            if(aTimer.IsEnabled == false)
+            {
+                aTimer.Start();
+            }
+            reposition = false;
         }
 
-       
+        private void clearPL(object sender, RoutedEventArgs e)
+        {
+            if (file.Any())
+            {
+                file.Clear();
+                Playlist.Items.Clear();
+            }
+            else
+            {
+                MessageBox.Show("List is empty");
+            }
+        }
     }
 }
