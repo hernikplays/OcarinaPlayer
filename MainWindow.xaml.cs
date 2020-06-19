@@ -16,12 +16,16 @@ using PlaylistsNET.Models;
 using PlaylistsNET.Content;
 using TagLib.Mpeg;
 using System.IO;
-using NAudio.Wave;
 using DiscordRPC;
 using DiscordRPC.Logging;
 using System.ComponentModel;
 using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
+using CSCore;
+using CSCore.Codecs;
+using CSCore.CoreAudioAPI;
+using CSCore.SoundOut;
+using System.Xml.Schema;
 
 namespace OcarinaPlayer
 {
@@ -71,16 +75,17 @@ namespace OcarinaPlayer
 
             });
         }
-        
-        private WaveOutEvent player = new WaveOutEvent();
+
+        public ISoundOut soundOut;
+        public IWaveSource waveSource;
         private List<string> file = new List<string>();
         private List<string> unshuffledPL = new List<string>();
-        WaveStream mainOutputStream;
         DispatcherTimer aTimer;
         public int i = 0;
         public bool loop = false;
         private bool shufflePL = false;
         private bool reposition = false;
+        private float pausedVol;
 
         private void openFile(object sender, RoutedEventArgs e)
         {
@@ -93,9 +98,13 @@ namespace OcarinaPlayer
                 shuffle.Background = new SolidColorBrush(color);
 
             }
-            OpenFileDialog open = new OpenFileDialog();
-            open.Multiselect = true; //multiple fileselect
-            open.Filter = "Audio File|*.mp3;";
+            OpenFileDialog open = new OpenFileDialog()
+            {
+                Filter = CodecFactory.SupportedFilesFilterEn,
+                Title = "Select files...",
+                Multiselect = true                
+            };
+           
             if (open.ShowDialog() == true)
             {
                 foreach (string files in open.FileNames)
@@ -125,14 +134,11 @@ namespace OcarinaPlayer
                  MessageBox.Show("You need to open a file first");
                 return;
             }
+            soundOut = new WasapiOut();
 
-            mainOutputStream = new Mp3FileReader(file[i]); //plays item from selected music
-            WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
-
-            
-            if (player.PlaybackState == PlaybackState.Playing)
+            if (soundOut.PlaybackState == PlaybackState.Playing)
             {
-                player.Pause(); //pause
+                soundOut.Pause(); //pause
                 playButton.Kind = PackIconKind.PlayArrow;
                 var playing = TagLib.File.Create(file[i]);
                 
@@ -167,9 +173,9 @@ namespace OcarinaPlayer
                 });
                 }
             }
-            else if(player.PlaybackState == PlaybackState.Paused)
+            else if(soundOut.PlaybackState == PlaybackState.Paused)
             {
-                player.Play(); //resume
+                soundOut.Play(); //resume
                 playButton.Kind = PackIconKind.Pause;
                 var playing = TagLib.File.Create(file[i]);
                 if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
@@ -203,11 +209,14 @@ namespace OcarinaPlayer
                 }
             }
             
-            else { 
-            
-                volumeStream.PadWithZeroes = false; //https://stackoverflow.com/a/11280383
+            else {
 
-                player.Init(volumeStream); //Initialize WaveChannel
+                
+                waveSource =
+                CodecFactory.Instance.GetCodec(file[i])
+                    .ToSampleSource()
+                    .ToMono()
+                    .ToWaveSource();
 
                 var playing = TagLib.File.Create(file[i]);
                 
@@ -257,53 +266,57 @@ namespace OcarinaPlayer
                 {
                     albumArt.Source = new BitmapImage(new Uri("assets/img/noalbum.png", UriKind.Relative));
                 }
+
+                soundOut.Initialize(waveSource);
+                MessageBox.Show(soundOut.Volume.ToString());
+                soundOut.Volume = pausedVol;
                 
-                player.Play(); //play
+                soundOut.Play();
+                
+
+                
+
                 playButton.Kind = PackIconKind.Pause;
                 aTimer = new DispatcherTimer();
-                aTimer.Tick += (sende, e2) => updateSec(sender, e, mainOutputStream);
+                aTimer.Tick += (sende, e2) => updateSec(sender, e, waveSource);
                 aTimer.Interval = new TimeSpan(0, 0, 1);
                 aTimer.Start();
 
-                seekbar.IsEnabled = true;
+                /*seekbar.IsEnabled = true;
                 seekbar.Value = 0;
                 int mm = mainOutputStream.TotalTime.Minutes;
                 int ss = mainOutputStream.TotalTime.Seconds;
                 int mintosec = mm * 60;
                 int seekbarSec = mintosec + ss;
-                seekbar.Maximum = seekbarSec;
+                seekbar.Maximum = seekbarSec;*/
 
-                player.PlaybackStopped += (sende, e2) => onPlaybackStop(sender, e, mainOutputStream, aTimer); //function to launch when playback stops
+                soundOut.Stopped += (sende, e2) => onPlaybackStop(sender, e, waveSource, aTimer); //function to launch when playback stops
                 
             }
         }
 
-        private void updateSec(object sender, EventArgs e, WaveStream mainOutputStream)
+        private void updateSec(object sender, EventArgs e, IWaveSource mainOutputStream)
         {
-            int hh = mainOutputStream.CurrentTime.Hours;
-            int mm = mainOutputStream.CurrentTime.Minutes;
-            int ss = mainOutputStream.CurrentTime.Seconds;
-            int mintosec = mm * 60;
-            int seekbarSec = mintosec + ss;
+            TimeSpan currentTime = mainOutputStream.GetPosition();
 
            
-            seekbar.Value = seekbarSec;
+            //seekbar.Value = seekbarSec;
 
-            var thetime = mainOutputStream.CurrentTime.ToString("mm\\:ss");
-            var totaltime = mainOutputStream.TotalTime.ToString("mm\\:ss");
+            //var thetime = mainOutputStream.CurrentTime.ToString("mm\\:ss");
+            var totaltime = new TimeSpan(mainOutputStream.Length);
             // Updating the Label which displays the current second
-            cas.Content = thetime + " / " + totaltime;
+            cas.Content = "00:00" + " / " + totaltime;
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
         }
 
-        public void onPlaybackStop(object sender, EventArgs e, WaveStream reader, DispatcherTimer timer)
+        public void onPlaybackStop(object sender, EventArgs e, IWaveSource reader, DispatcherTimer timer)
         {
             if(reposition == false) { 
             timer.Stop();
-
-            if(reader.CurrentTime == reader.TotalTime && player.PlaybackState == PlaybackState.Stopped)
+                TimeSpan total = new TimeSpan(reader.Length);
+            if(reader.GetPosition() == total && soundOut.PlaybackState == PlaybackState.Stopped)
             {
                 
                 i++;
@@ -336,7 +349,7 @@ namespace OcarinaPlayer
                 i = 0;
                 
             }
-            player.Dispose();
+            soundOut.Dispose();
 
             play(sender, e);
         }
@@ -350,13 +363,13 @@ namespace OcarinaPlayer
                 
             }
 
-            player.Dispose();
+            soundOut.Dispose();
             
             play(sender, e);
         }
         public void stop(object sender, RoutedEventArgs e)
         {
-            player.Stop();
+            soundOut.Stop();
 
         }
 
@@ -426,13 +439,20 @@ namespace OcarinaPlayer
 
         public void onCloseApp(object sender, EventArgs e)
         {
+            soundOut.Dispose();
             client.Dispose();
         }
 
         private void volumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if(soundOut == null)
+            {
+               pausedVol = Convert.ToSingle(volumeSlider.Value);
+            }
+            else { 
             float vol = Convert.ToSingle(volumeSlider.Value);
-            player.Volume = vol;
+            soundOut.Volume = vol;
+            }
         }
 
         private void shuffle_Click(object sender, RoutedEventArgs e)
@@ -472,10 +492,10 @@ namespace OcarinaPlayer
         private void seekbar_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             reposition = true;
-            player.Stop();
+            soundOut.Stop();
             TimeSpan tomove = new TimeSpan(0, (int)(Math.Floor(seekbar.Value / 60)), (int)(Math.Floor(seekbar.Value % 60)));
-            mainOutputStream.CurrentTime = tomove;
-            player.Play();
+            waveSource.Position = tomove.Ticks;
+            soundOut.Play();
             if(aTimer.IsEnabled == false)
             {
                 aTimer.Start();
