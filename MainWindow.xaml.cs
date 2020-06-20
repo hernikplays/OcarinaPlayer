@@ -268,7 +268,6 @@ namespace OcarinaPlayer
                 }
 
                 soundOut.Initialize(waveSource);
-                MessageBox.Show(soundOut.Volume.ToString());
                 soundOut.Volume = pausedVol;
                 
                 soundOut.Play();
