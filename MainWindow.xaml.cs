@@ -281,13 +281,13 @@ namespace OcarinaPlayer
                 aTimer.Interval = new TimeSpan(0, 0, 1);
                 aTimer.Start();
 
-                /*seekbar.IsEnabled = true;
+                seekbar.IsEnabled = true;
                 seekbar.Value = 0;
-                int mm = mainOutputStream.TotalTime.Minutes;
-                int ss = mainOutputStream.TotalTime.Seconds;
+                int mm = waveSource.GetLength().Minutes;
+                int ss = waveSource.GetLength().Seconds;
                 int mintosec = mm * 60;
                 int seekbarSec = mintosec + ss;
-                seekbar.Maximum = seekbarSec;*/
+                seekbar.Maximum = seekbarSec;
 
                 soundOut.Stopped += (sende, e2) => onPlaybackStop(sender, e, waveSource, aTimer); //function to launch when playback stops
                 
@@ -297,14 +297,16 @@ namespace OcarinaPlayer
         private void updateSec(object sender, EventArgs e, IWaveSource mainOutputStream)
         {
             TimeSpan currentTime = mainOutputStream.GetPosition();
-
+            int minutes = mainOutputStream.GetPosition().Minutes;
+            int secs = mainOutputStream.GetPosition().Seconds;
+            int seekbarSec = secs + minutes * 60;
            
-            //seekbar.Value = seekbarSec;
+            seekbar.Value = seekbarSec;
 
             //var thetime = mainOutputStream.CurrentTime.ToString("mm\\:ss");
-            var totaltime = new TimeSpan(mainOutputStream.Length);
+            TimeSpan totaltime = mainOutputStream.GetLength();
             // Updating the Label which displays the current second
-            cas.Content = "00:00" + " / " + totaltime;
+            cas.Content = currentTime.ToString("mm\\:ss") + " / " + totaltime.ToString("mm\\:ss");
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
@@ -494,6 +496,7 @@ namespace OcarinaPlayer
             soundOut.Stop();
             TimeSpan tomove = new TimeSpan(0, (int)(Math.Floor(seekbar.Value / 60)), (int)(Math.Floor(seekbar.Value % 60)));
             waveSource.Position = tomove.Ticks;
+            MessageBox.Show(waveSource.GetPosition().ToString("mm\\:ss"));
             soundOut.Play();
             if(aTimer.IsEnabled == false)
             {
