@@ -270,13 +270,13 @@ namespace OcarinaPlayer
                 aTimer.Interval = new TimeSpan(0, 0, 1);
                 aTimer.Start();
 
-                /*seekbar.IsEnabled = true;
+                seekbar.IsEnabled = true;
                 seekbar.Value = 0;
-                int mm = mainOutputStream.TotalTime.Minutes;
-                int ss = mainOutputStream.TotalTime.Seconds;
+                int mm = waveSource.GetLength().Minutes;
+                int ss = waveSource.GetLength().Seconds;
                 int mintosec = mm * 60;
                 int seekbarSec = mintosec + ss;
-                seekbar.Maximum = seekbarSec;*/
+                seekbar.Maximum = seekbarSec;
 
                 soundOut.Stopped += (sende, e2) => onPlaybackStop(sender, e, waveSource, aTimer); //function to launch when playback stops
                 
@@ -290,7 +290,7 @@ namespace OcarinaPlayer
             var sec = currentTime.Seconds;
 
            
-            //seekbar.Value = seekbarSec;
+            seekbar.Value = seekbarSec;
 
             var thetime = mainOutputStream.GetPosition().ToString("mm\\:ss");
             var totaltime = new TimeSpan(mainOutputStream.Length).ToString("mm\\:ss");
@@ -477,6 +477,7 @@ namespace OcarinaPlayer
             soundOut.Stop();
             TimeSpan tomove = new TimeSpan(0, (int)(Math.Floor(seekbar.Value / 60)), (int)(Math.Floor(seekbar.Value % 60)));
             waveSource.Position = tomove.Ticks;
+            MessageBox.Show(waveSource.GetPosition().ToString("mm\\:ss"));
             soundOut.Play();
             if(aTimer.IsEnabled == false)
             {
