@@ -72,7 +72,6 @@ namespace OcarinaPlayer
                     LargeImageKey = "rpcon",
                     LargeImageText = "Ocarina Music Player"
                 }
-
             });
         }
 
@@ -121,13 +120,10 @@ namespace OcarinaPlayer
                         Playlist.Items.Add(playing.Tag.FirstPerformer + " - " + playing.Tag.Title);
                     }
                 }
-                
             }
-            
         }
         private void play(object sender, RoutedEventArgs e)
         {
-
             // PLAY FUNCTION
             if(!file.Any())
             {
@@ -204,14 +200,11 @@ namespace OcarinaPlayer
                             LargeImageKey = "rpcon",
                             LargeImageText = "Ocarina Music Player"
                         }
-
                     });
                 }
             }
             
             else {
-
-                
                 waveSource =
                 CodecFactory.Instance.GetCodec(file[i])
                     .ToSampleSource()
@@ -234,7 +227,6 @@ namespace OcarinaPlayer
                             LargeImageKey = "rpcon",
                             LargeImageText = "Ocarina Music Player"
                         }
-
                     });
 
                     artistSong.Text = filename;
@@ -271,9 +263,6 @@ namespace OcarinaPlayer
                 soundOut.Volume = pausedVol;
                 
                 soundOut.Play();
-                
-
-                
 
                 playButton.Kind = PackIconKind.Pause;
                 aTimer = new DispatcherTimer();
@@ -297,14 +286,16 @@ namespace OcarinaPlayer
         private void updateSec(object sender, EventArgs e, IWaveSource mainOutputStream)
         {
             TimeSpan currentTime = mainOutputStream.GetPosition();
+            var min = currentTime.Minutes;
+            var sec = currentTime.Seconds;
 
            
             //seekbar.Value = seekbarSec;
 
-            //var thetime = mainOutputStream.CurrentTime.ToString("mm\\:ss");
-            var totaltime = new TimeSpan(mainOutputStream.Length);
+            var thetime = mainOutputStream.GetPosition().ToString("mm\\:ss");
+            var totaltime = new TimeSpan(mainOutputStream.Length).ToString("mm\\:ss");
             // Updating the Label which displays the current second
-            cas.Content = "00:00" + " / " + totaltime;
+            cas.Content = thetime + " / " + totaltime;
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
@@ -317,7 +308,6 @@ namespace OcarinaPlayer
                 TimeSpan total = new TimeSpan(reader.Length);
             if(reader.GetPosition() == total && soundOut.PlaybackState == PlaybackState.Stopped)
             {
-                
                 i++;
                 if(i > file.Count - 1) {
                     i = 0;
@@ -328,17 +318,14 @@ namespace OcarinaPlayer
                     }
                 }
                 else
-                {
-                      
+                {   
                  RoutedEventArgs ee = new RoutedEventArgs();
                  play(sender, ee);
                         
                 }
              }
             }
-
         }
-
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
             i = i + 1;
@@ -346,7 +333,6 @@ namespace OcarinaPlayer
             if (i > file.Count - 1)
             {
                 i = 0;
-                
             }
             soundOut.Dispose();
 
@@ -357,9 +343,7 @@ namespace OcarinaPlayer
             i = i - 1;
             if (i == -1)
             {
-
                 i = file.Count - 1;
-                
             }
 
             soundOut.Dispose();
@@ -369,7 +353,6 @@ namespace OcarinaPlayer
         public void stop(object sender, RoutedEventArgs e)
         {
             soundOut.Stop();
-
         }
 
         private void savePL(object sender, RoutedEventArgs e)

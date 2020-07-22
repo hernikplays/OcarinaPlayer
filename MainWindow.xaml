@@ -746,7 +746,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label Content="Selected Songs List:" FontSize="16" Margin="9,0,0,0"/>
+            <Label Content="Song Queue:" FontSize="16" Margin="9,0,0,0"/>
             <ListBox HorizontalAlignment="Left" Height="252" Margin="0,20,-240,0" VerticalAlignment="Top" Width="246" Name="Playlist" MouseLeftButtonUp="Playlist_Click">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
