@@ -130,9 +130,86 @@ namespace OcarinaPlayer
                  MessageBox.Show("You need to open a file first");
                 return;
             }
-            soundOut = new WasapiOut();
+            
+            if(soundOut == null)
+            {
 
-            if (soundOut.PlaybackState == PlaybackState.Playing)
+                soundOut = new WasapiOut();
+                waveSource =
+                CodecFactory.Instance.GetCodec(file[i])
+                    .ToSampleSource()
+                    .ToMono()
+                    .ToWaveSource();
+
+                var playing = TagLib.File.Create(file[i]);
+
+                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                {
+                    var filename = Path.GetFileName(file[i]);
+                    client.SetPresence(new RichPresence()
+                    {
+                        Details = "Listening to " + filename,
+                        Timestamps = Timestamps.Now,
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = "rpcon",
+                            LargeImageText = "Ocarina Music Player"
+                        }
+                    });
+
+                    artistSong.Text = filename;
+                }
+                else
+                {
+                    client.SetPresence(new RichPresence()
+                    {
+                        Details = "Listening to " + playing.Tag.Title,
+                        State = "by " + playing.Tag.FirstPerformer,
+                        Timestamps = Timestamps.Now,
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = "rpcon",
+                            LargeImageText = "Ocarina Music Player"
+                        }
+
+                    });
+                    artistSong.Text = playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
+                }
+
+                if (playing.Tag.Pictures.Length >= 1)
+                {
+                    MemoryStream stream = new MemoryStream(playing.Tag.Pictures[0].Data.Data);
+                    BitmapFrame bmp = BitmapFrame.Create(stream);
+                    albumArt.Source = bmp;
+                }
+                else
+                {
+                    albumArt.Source = new BitmapImage(new Uri("assets/img/noalbum.png", UriKind.Relative));
+                }
+
+                soundOut.Initialize(waveSource);
+                soundOut.Volume = pausedVol;
+
+                soundOut.Play();
+
+                playButton.Kind = PackIconKind.Pause;
+                aTimer = new DispatcherTimer();
+                aTimer.Tick += (sende, e2) => updateSec(sender, e, waveSource);
+                aTimer.Interval = new TimeSpan(0, 0, 1);
+                aTimer.Start();
+
+                seekbar.IsEnabled = true;
+                seekbar.Value = 0;
+                int mm = waveSource.GetLength().Minutes;
+                int ss = waveSource.GetLength().Seconds;
+                int mintosec = mm * 60;
+                int seekbarSec = mintosec + ss;
+                seekbar.Maximum = seekbarSec;
+
+                soundOut.Stopped += (sende, e2) => onPlaybackStop(sender, e, waveSource, aTimer); //function to launch when playback stops
+
+            }
+            else if (soundOut.PlaybackState == PlaybackState.Playing)
             {
                 soundOut.Pause(); //pause
                 playButton.Kind = PackIconKind.PlayArrow;
@@ -204,83 +281,6 @@ namespace OcarinaPlayer
                 }
             }
             
-            else {
-                waveSource =
-                CodecFactory.Instance.GetCodec(file[i])
-                    .ToSampleSource()
-                    .ToMono()
-                    .ToWaveSource();
-
-                var playing = TagLib.File.Create(file[i]);
-                
-
-
-                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0 )
-                {
-                    var filename = Path.GetFileName(file[i]);
-                    client.SetPresence(new RichPresence()
-                    {
-                        Details = "Listening to " + filename,
-                        Timestamps = Timestamps.Now,
-                        Assets = new Assets()
-                        {
-                            LargeImageKey = "rpcon",
-                            LargeImageText = "Ocarina Music Player"
-                        }
-                    });
-
-                    artistSong.Text = filename;
-                }
-                else
-                {
-                    client.SetPresence(new RichPresence()
-                    {
-                        Details = "Listening to " + playing.Tag.Title,
-                        State = "by " + playing.Tag.FirstPerformer,
-                        Timestamps = Timestamps.Now,
-                        Assets = new Assets()
-                        {
-                            LargeImageKey = "rpcon",
-                            LargeImageText = "Ocarina Music Player"
-                        }
-
-                    });
-                    artistSong.Text = playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
-                }
-
-                if (playing.Tag.Pictures.Length >= 1)
-                {
-                    MemoryStream stream = new MemoryStream(playing.Tag.Pictures[0].Data.Data);
-                    BitmapFrame bmp = BitmapFrame.Create(stream);
-                    albumArt.Source = bmp;
-                }
-                else
-                {
-                    albumArt.Source = new BitmapImage(new Uri("assets/img/noalbum.png", UriKind.Relative));
-                }
-
-                soundOut.Initialize(waveSource);
-                soundOut.Volume = pausedVol;
-                
-                soundOut.Play();
-
-                playButton.Kind = PackIconKind.Pause;
-                aTimer = new DispatcherTimer();
-                aTimer.Tick += (sende, e2) => updateSec(sender, e, waveSource);
-                aTimer.Interval = new TimeSpan(0, 0, 1);
-                aTimer.Start();
-
-                seekbar.IsEnabled = true;
-                seekbar.Value = 0;
-                int mm = waveSource.GetLength().Minutes;
-                int ss = waveSource.GetLength().Seconds;
-                int mintosec = mm * 60;
-                int seekbarSec = mintosec + ss;
-                seekbar.Maximum = seekbarSec;
-
-                soundOut.Stopped += (sende, e2) => onPlaybackStop(sender, e, waveSource, aTimer); //function to launch when playback stops
-                
-            }
         }
 
         private void updateSec(object sender, EventArgs e, IWaveSource mainOutputStream)
@@ -288,7 +288,7 @@ namespace OcarinaPlayer
             TimeSpan currentTime = mainOutputStream.GetPosition();
             var min = currentTime.Minutes;
             var sec = currentTime.Seconds;
-
+            var seekbarSec = min * 60 + sec;
            
             seekbar.Value = seekbarSec;
 
