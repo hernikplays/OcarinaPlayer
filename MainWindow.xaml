@@ -736,7 +736,7 @@
                     <MenuItem Header="Open file" Click="openFile"/>
                     <MenuItem Header="Open playlist" Click="openPL"/>
                     <MenuItem Header="Save playlist" Click="savePL"/>
-                    <MenuItem Header="Clear Now Playing" Click="clearPL"/>
+                    <MenuItem Header="Clear Song Queue" Click="clearPL"/>
                     <Separator />
                     <MenuItem Header="Exit" />
                 </MenuItem>

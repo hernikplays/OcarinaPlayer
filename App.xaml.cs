@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using DiscordRPC;
 using DiscordRPC.Logging;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace OcarinaPlayer
 {
@@ -15,6 +16,10 @@ namespace OcarinaPlayer
     /// </summary>
     public partial class App : Application
     {
-		
-	}
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            DesktopNotificationManagerCompat.RegisterAumidAndComServer<NotifActivator>("Hernikplays.Ocarina");
+            DesktopNotificationManagerCompat.RegisterActivator<NotifActivator>();
+        }
+    }
 }
