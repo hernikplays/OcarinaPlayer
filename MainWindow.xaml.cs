@@ -307,16 +307,15 @@ namespace OcarinaPlayer
         {
             if(reposition == false) { 
             timer.Stop();
-                TimeSpan total = new TimeSpan(reader.Length);
+                TimeSpan total = reader.GetLength();
             if(reader.GetPosition() == total && soundOut.PlaybackState == PlaybackState.Stopped)
             {
                 i++;
                 if(i > file.Count - 1) {
                     i = 0;
-                    if(loop == true) {
-                            
-                RoutedEventArgs ee = new RoutedEventArgs();
-                play(sender, ee);
+                    if(loop == true) {  
+                        RoutedEventArgs ee = new RoutedEventArgs();
+                        play(sender, ee);
                     }
                 }
                 else
@@ -505,6 +504,22 @@ namespace OcarinaPlayer
             else
             {
                 MessageBox.Show("List is empty");
+            }
+        }
+
+        private void loop_Click(object sender, RoutedEventArgs e)
+        {
+            if(loop == false)
+            {
+                loop = true;
+                Color color = (Color)ColorConverter.ConvertFromString("#3594ff");
+                loopButton.Background = new SolidColorBrush(color);
+            }
+            else
+            {
+                loop = false;
+                Color color = (Color)ColorConverter.ConvertFromString("#1eb6ff");
+                loopButton.Background = new SolidColorBrush(color);
             }
         }
     }
