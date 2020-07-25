@@ -26,8 +26,6 @@ using CSCore.Codecs;
 using CSCore.CoreAudioAPI;
 using CSCore.SoundOut;
 using System.Xml.Schema;
-using Microsoft.Toolkit.Uwp.Notifications;
-using Windows.UI.Notifications;
 
 namespace OcarinaPlayer
 {
@@ -88,7 +86,6 @@ namespace OcarinaPlayer
         private bool shufflePL = false;
         private bool reposition = false;
         private float pausedVol;
-        private bool firsttime = true;
 
         private void openFile(object sender, RoutedEventArgs e)
         {
@@ -267,38 +264,7 @@ namespace OcarinaPlayer
                 soundOut.Volume = pausedVol;
 
                 soundOut.Play();
-                if (firsttime == false)
-                {
-                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
-                    {
-                        var filename = Path.GetFileName(file[i]);
-                        ToastContent toastContent = new ToastContentBuilder()
-                        .AddText("Now Playing:")
-                        .AddText(filename)
-                        .GetToastContent();
-
-                        // Create the toast notification
-                        var toast = new ToastNotification(toastContent.GetXml());
-                        // And then show it
-                        DesktopNotificationManagerCompat.CreateToastNotifier().Show(toast);
-                    }
-                    else
-                    {
-                        ToastContent toastContent = new ToastContentBuilder()
-                        .AddText("Now Playing:")
-                        .AddText(playing.Tag.FirstPerformer + " - " + playing.Tag.Title)
-                        .GetToastContent();
-
-                        // Create the toast notification
-                        var toast = new ToastNotification(toastContent.GetXml());
-                        // And then show it
-                        DesktopNotificationManagerCompat.CreateToastNotifier().Show(toast);
-                    }
-                }
-                else
-                {
-                    firsttime = false;
-                }
+                
 
                 playButton.Kind = PackIconKind.Pause;
                 aTimer = new DispatcherTimer();
@@ -534,7 +500,6 @@ namespace OcarinaPlayer
             if (file.Any())
             {
                 file.Clear();
-                firsttime = false;
                 Playlist.Items.Clear();
             }
             else
