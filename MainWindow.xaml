@@ -740,6 +740,9 @@
                     <Separator />
                     <MenuItem Header="Exit" />
                 </MenuItem>
+                <MenuItem Header="Edit" Height="27">
+                    <MenuItem Header="Settings" Click="openSettings"/>
+                </MenuItem>
             </Menu>
         </Grid>
         <Grid HorizontalAlignment="Left" Width="249" Margin="0,32,733,397">

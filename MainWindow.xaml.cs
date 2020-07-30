@@ -522,5 +522,11 @@ namespace OcarinaPlayer
                 loopButton.Background = new SolidColorBrush(color);
             }
         }
+
+        private void openSettings(object sender, RoutedEventArgs e)
+        {
+            var settWindow = new Settings();
+            settWindow.ShowDialog();
+        }
     }
 }
