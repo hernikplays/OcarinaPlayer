@@ -8,11 +8,16 @@
         Title="Settings" Height="450" Width="800"
         MaxHeight="450" MaxWidth="800"
         MinHeight="450" MinWidth="800">
+    <Window.Resources>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="55"></RowDefinition>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="Settings" FontSize="23"></Label>
+        <Label Content="Settings" FontSize="26" Grid.Row="0" HorizontalContentAlignment="Center"></Label>
+        <Viewbox Height="28" Grid.Row="1" >
+            <CheckBox Content="Allow Discord Rich Presence"/>
+        </Viewbox>
     </Grid>
 </Window>

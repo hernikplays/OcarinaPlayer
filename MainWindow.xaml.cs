@@ -26,6 +26,7 @@ using CSCore.Codecs;
 using CSCore.CoreAudioAPI;
 using CSCore.SoundOut;
 using System.Xml.Schema;
+using Newtonsoft.Json;
 
 namespace OcarinaPlayer
 {
@@ -35,6 +36,9 @@ namespace OcarinaPlayer
     public partial class MainWindow : Window
     {
         private DiscordRpcClient client = new DiscordRpcClient("690238946378121296");
+        private string configPath = Path.Combine(Environment.GetFolderPath(
+    Environment.SpecialFolder.ApplicationData), "/Ocarina/appconfig.json");
+        private Config config = new Config();
 
         public MainWindow()
         {
@@ -43,11 +47,25 @@ namespace OcarinaPlayer
         }
         private void OnLoad(object sender, RoutedEventArgs e)
         {
+            //CHECK FOR CONFIG
+            if (System.IO.File.Exists(configPath) == false)
+            {
+                config.EnableDRPC = true;
+                config.Lang = "en";
+                string json = JsonConvert.SerializeObject(config);
+                using (FileStream fs = System.IO.File.Create(configPath))
+                {
+                    Byte[] text = new UTF8Encoding(true).GetBytes(json);
+                    fs.Write(text, 0, text.Length);
+                    MessageBox.Show("Written config");
+                }
+            }
+
+
             seekbar.IsEnabled = false;
-            //Set the logger
+
             client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
 
-            //Subscribe to events
             client.OnReady += (senderRPC, eRPC) =>
             {
                 Console.WriteLine("Received Ready from user {0}", eRPC.User.Username);
