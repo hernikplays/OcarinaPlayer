@@ -37,8 +37,8 @@ namespace OcarinaPlayer
     {
         private DiscordRpcClient client = new DiscordRpcClient("690238946378121296");
         private string configPath = Path.Combine(Environment.GetFolderPath(
-    Environment.SpecialFolder.ApplicationData), "/Ocarina/appconfig.json");
-        private Config config = new Config();
+    Environment.SpecialFolder.ApplicationData), "OcarinaPlayer\\appconfig.json");
+        private Config config;
 
         public MainWindow()
         {
@@ -48,50 +48,59 @@ namespace OcarinaPlayer
         private void OnLoad(object sender, RoutedEventArgs e)
         {
             //CHECK FOR CONFIG
+            MessageBox.Show(configPath + "\n" + System.IO.File.Exists(configPath).ToString());
             if (System.IO.File.Exists(configPath) == false)
             {
+                var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OcarinaPlayer");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                config = new Config();
                 config.EnableDRPC = true;
                 config.Lang = "en";
                 string json = JsonConvert.SerializeObject(config);
-                using (FileStream fs = System.IO.File.Create(configPath))
-                {
-                    Byte[] text = new UTF8Encoding(true).GetBytes(json);
-                    fs.Write(text, 0, text.Length);
-                    MessageBox.Show("Written config");
-                }
+                System.IO.File.WriteAllText(configPath, json);
+            }
+            else
+            {
+                string json = System.IO.File.ReadAllText(configPath);
+                config = JsonConvert.DeserializeObject<Config>(json);
             }
 
 
             seekbar.IsEnabled = false;
 
-            client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
-
-            client.OnReady += (senderRPC, eRPC) =>
+            if (config.EnableDRPC == true)
             {
-                Console.WriteLine("Received Ready from user {0}", eRPC.User.Username);
-            };
+                client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
 
-            client.OnPresenceUpdate += (senderRPC, eRPC) =>
-            {
-                Console.WriteLine("Received Update! {0}", eRPC.Presence);
-            };
-
-            //Connect to the RPC
-            client.Initialize();
-
-            //Set the rich presence
-            //Call this as many times as you want and anywhere in your code.
-            client.SetPresence(new RichPresence()
-            {
-                Details = "Not listening to anything",
-                State = "...",
-                Assets = new Assets()
+                client.OnReady += (senderRPC, eRPC) =>
                 {
-                    LargeImageKey = "rpcon",
-                    LargeImageText = "Ocarina Music Player"
-                }
-            });
-            
+                    Console.WriteLine("Received Ready from user {0}", eRPC.User.Username);
+                };
+
+                client.OnPresenceUpdate += (senderRPC, eRPC) =>
+                {
+                    Console.WriteLine("Received Update! {0}", eRPC.Presence);
+                };
+
+                //Connect to the RPC
+                client.Initialize();
+
+                //Set the rich presence
+                //Call this as many times as you want and anywhere in your code.
+                client.SetPresence(new RichPresence()
+                {
+                    Details = "Not listening to anything",
+                    State = "...",
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = "rpcon",
+                        LargeImageText = "Ocarina Music Player"
+                    }
+                });
+            }
         }
 
         public ISoundOut soundOut;
@@ -108,7 +117,7 @@ namespace OcarinaPlayer
         private void openFile(object sender, RoutedEventArgs e)
         {
             // OPEN AND LOAD FILES
-            if(shufflePL == true)
+            if (shufflePL == true)
             {
                 shufflePL = false;
                 unshuffledPL.Clear();
@@ -120,9 +129,9 @@ namespace OcarinaPlayer
             {
                 Filter = CodecFactory.SupportedFilesFilterEn,
                 Title = "Select files...",
-                Multiselect = true                
+                Multiselect = true
             };
-           
+
             if (open.ShowDialog() == true)
             {
                 foreach (string files in open.FileNames)
@@ -144,12 +153,12 @@ namespace OcarinaPlayer
         private void play(object sender, RoutedEventArgs e)
         {
             // PLAY FUNCTION
-            if(!file.Any())
+            if (!file.Any())
             {
-                 MessageBox.Show("You need to open a file first");
+                MessageBox.Show("You need to open a file first");
                 return;
             }
-            if(soundOut == null || soundOut.PlaybackState == PlaybackState.Stopped)
+            if (soundOut == null || soundOut.PlaybackState == PlaybackState.Stopped)
             {
                 soundOut = new WasapiOut();
             }
@@ -159,70 +168,80 @@ namespace OcarinaPlayer
                 soundOut.Pause(); //pause
                 playButton.Kind = PackIconKind.PlayArrow;
                 var playing = TagLib.File.Create(file[i]);
-                
-                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
-                {
-                    var filename = Path.GetFileName(file[i]);
-                    client.SetPresence(new RichPresence()
-                    {
 
-                        Details = "Listening to " + filename,
-                        State = "Paused",
-                        Assets = new Assets()
+                if (config.EnableDRPC == true)
+                {
+                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                    {
+                        var filename = Path.GetFileName(file[i]);
+                        client.SetPresence(new RichPresence()
                         {
-                            LargeImageKey = "rpcon",
-                            LargeImageText = "Ocarina Music Player"
-                        }
 
-                    });
-                }
-                else { 
-                client.SetPresence(new RichPresence()
-                {
+                            Details = "Listening to " + filename,
+                            State = "Paused",
+                            Assets = new Assets()
+                            {
+                                LargeImageKey = "rpcon",
+                                LargeImageText = "Ocarina Music Player"
+                            }
 
-                    Details = "Listening to " + playing.Tag.Title,
-                    State = "Paused",
-                    Assets = new Assets()
-                    {
-                        LargeImageKey = "rpcon",
-                        LargeImageText = "Ocarina Music Player"
+                        });
                     }
+                    else
+                    {
+                        client.SetPresence(new RichPresence()
+                        {
 
-                });
+                            Details = "Listening to " + playing.Tag.Title,
+                            State = "Paused",
+                            Assets = new Assets()
+                            {
+                                LargeImageKey = "rpcon",
+                                LargeImageText = "Ocarina Music Player"
+                            }
+
+                        });
+                    }
                 }
             }
-            else if(soundOut.PlaybackState == PlaybackState.Paused)
+            else if (soundOut.PlaybackState == PlaybackState.Paused)
             {
                 soundOut.Play(); //resume
                 playButton.Kind = PackIconKind.Pause;
-                var playing = TagLib.File.Create(file[i]);
-                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
-                {
-                    var filename = Path.GetFileName(file[i]);
-                    client.SetPresence(new RichPresence()
-                    {
-                        Details = "Listening to " + filename,
-                        Timestamps = Timestamps.Now,
-                        Assets = new Assets()
-                        {
-                            LargeImageKey = "rpcon",
-                            LargeImageText = "Ocarina Music Player"
-                        }
 
-                    });
-                }
-                else {
-                    client.SetPresence(new RichPresence()
+
+                var playing = TagLib.File.Create(file[i]);
+                if (config.EnableDRPC == true)
+                {
+                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
                     {
-                        Details = "Listening to " + playing.Tag.Title,
-                        State = "by " + playing.Tag.FirstPerformer,
-                        Timestamps = Timestamps.Now,
-                        Assets = new Assets()
+                        var filename = Path.GetFileName(file[i]);
+                        client.SetPresence(new RichPresence()
                         {
-                            LargeImageKey = "rpcon",
-                            LargeImageText = "Ocarina Music Player"
-                        }
-                    });
+                            Details = "Listening to " + filename,
+                            Timestamps = Timestamps.Now,
+                            Assets = new Assets()
+                            {
+                                LargeImageKey = "rpcon",
+                                LargeImageText = "Ocarina Music Player"
+                            }
+
+                        });
+                    }
+                    else
+                    {
+                        client.SetPresence(new RichPresence()
+                        {
+                            Details = "Listening to " + playing.Tag.Title,
+                            State = "by " + playing.Tag.FirstPerformer,
+                            Timestamps = Timestamps.Now,
+                            Assets = new Assets()
+                            {
+                                LargeImageKey = "rpcon",
+                                LargeImageText = "Ocarina Music Player"
+                            }
+                        });
+                    }
                 }
             }
             else
@@ -233,39 +252,43 @@ namespace OcarinaPlayer
                     .ToMono()
                     .ToWaveSource();
 
+
+
                 var playing = TagLib.File.Create(file[i]);
-
-                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                if (config.EnableDRPC == true)
                 {
-                    var filename = Path.GetFileName(file[i]);
-                    client.SetPresence(new RichPresence()
+                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
                     {
-                        Details = "Listening to " + filename,
-                        Timestamps = Timestamps.Now,
-                        Assets = new Assets()
+                        var filename = Path.GetFileName(file[i]);
+                        client.SetPresence(new RichPresence()
                         {
-                            LargeImageKey = "rpcon",
-                            LargeImageText = "Ocarina Music Player"
-                        }
-                    });
+                            Details = "Listening to " + filename,
+                            Timestamps = Timestamps.Now,
+                            Assets = new Assets()
+                            {
+                                LargeImageKey = "rpcon",
+                                LargeImageText = "Ocarina Music Player"
+                            }
+                        });
 
-                    artistSong.Text = filename;
-                }
-                else
-                {
-                    client.SetPresence(new RichPresence()
+                        artistSong.Text = filename;
+                    }
+                    else
                     {
-                        Details = "Listening to " + playing.Tag.Title,
-                        State = "by " + playing.Tag.FirstPerformer,
-                        Timestamps = Timestamps.Now,
-                        Assets = new Assets()
+                        client.SetPresence(new RichPresence()
                         {
-                            LargeImageKey = "rpcon",
-                            LargeImageText = "Ocarina Music Player"
-                        }
+                            Details = "Listening to " + playing.Tag.Title,
+                            State = "by " + playing.Tag.FirstPerformer,
+                            Timestamps = Timestamps.Now,
+                            Assets = new Assets()
+                            {
+                                LargeImageKey = "rpcon",
+                                LargeImageText = "Ocarina Music Player"
+                            }
 
-                    });
-                    artistSong.Text = playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
+                        });
+                        artistSong.Text = playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
+                    }
                 }
 
                 if (playing.Tag.Pictures.Length >= 1)
@@ -282,7 +305,7 @@ namespace OcarinaPlayer
                 soundOut.Volume = pausedVol;
 
                 soundOut.Play();
-                
+
 
                 playButton.Kind = PackIconKind.Pause;
                 aTimer = new DispatcherTimer();
@@ -300,7 +323,7 @@ namespace OcarinaPlayer
 
                 soundOut.Stopped += (sende, e2) => onPlaybackStop(sender, e, waveSource, aTimer); //function to launch when playback stops
             }
-            
+
         }
 
         private void updateSec(object sender, EventArgs e, IWaveSource mainOutputStream)
@@ -309,7 +332,7 @@ namespace OcarinaPlayer
             var min = currentTime.Minutes;
             var sec = currentTime.Seconds;
             var seekbarSec = min * 60 + sec;
-           
+
             seekbar.Value = seekbarSec;
 
             var thetime = mainOutputStream.GetPosition().ToString("mm\\:ss");
@@ -323,32 +346,35 @@ namespace OcarinaPlayer
 
         public void onPlaybackStop(object sender, EventArgs e, IWaveSource reader, DispatcherTimer timer)
         {
-            if(reposition == false) { 
-            timer.Stop();
-                TimeSpan total = reader.GetLength();
-            if(reader.GetPosition() == total && soundOut.PlaybackState == PlaybackState.Stopped)
+            if (reposition == false)
             {
-                i++;
-                if(i > file.Count - 1) {
-                    i = 0;
-                    if(loop == true) {  
+                timer.Stop();
+                TimeSpan total = reader.GetLength();
+                if (reader.GetPosition() == total && soundOut.PlaybackState == PlaybackState.Stopped)
+                {
+                    i++;
+                    if (i > file.Count - 1)
+                    {
+                        i = 0;
+                        if (loop == true)
+                        {
+                            RoutedEventArgs ee = new RoutedEventArgs();
+                            play(sender, ee);
+                        }
+                    }
+                    else
+                    {
                         RoutedEventArgs ee = new RoutedEventArgs();
                         play(sender, ee);
+
                     }
                 }
-                else
-                {   
-                 RoutedEventArgs ee = new RoutedEventArgs();
-                 play(sender, ee);
-                        
-                }
-             }
             }
         }
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
             i += 1;
-            
+
             if (i > file.Count - 1)
             {
                 i = 0;
@@ -367,7 +393,7 @@ namespace OcarinaPlayer
                 i = file.Count - 1;
             }
 
-            if(soundOut != null)
+            if (soundOut != null)
             {
                 soundOut.Dispose();
             }
@@ -390,7 +416,7 @@ namespace OcarinaPlayer
             SaveFileDialog savefile = new SaveFileDialog();
             savefile.Filter = "Playlist Files|*.m3u;";
             savefile.FileName = "MyPlaylist.m3u";
-            
+
             List<TagLib.File> filesToRead = new List<TagLib.File>();
 
             foreach (string files in file)
@@ -406,7 +432,7 @@ namespace OcarinaPlayer
 
             foreach (var files in file)
             {
-                
+
                 playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
                 {
                     Album = filesToRead[foreachindex].Tag.Album,
@@ -429,8 +455,8 @@ namespace OcarinaPlayer
         {
             OpenFileDialog pl = new OpenFileDialog();
             pl.Filter = "Playlist Files|*.m3u;";
-           
-            if(pl.ShowDialog() != true)
+
+            if (pl.ShowDialog() != true)
             {
                 MessageBox.Show("An Error occured");
                 return;
@@ -445,28 +471,32 @@ namespace OcarinaPlayer
 
         public void onCloseApp(object sender, EventArgs e)
         {
-            if(soundOut != null)
+            if (soundOut != null)
             {
                 soundOut.Dispose();
             }
-            client.Dispose();
+            if (config.EnableDRPC == true)
+            {
+                client.Dispose();
+            }
         }
 
         private void volumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if(soundOut == null)
+            if (soundOut == null)
             {
-               pausedVol = Convert.ToSingle(volumeSlider.Value);
+                pausedVol = Convert.ToSingle(volumeSlider.Value);
             }
-            else { 
-            float vol = Convert.ToSingle(volumeSlider.Value);
-            soundOut.Volume = vol;
+            else
+            {
+                float vol = Convert.ToSingle(volumeSlider.Value);
+                soundOut.Volume = vol;
             }
         }
 
         private void shuffle_Click(object sender, RoutedEventArgs e)
         {
-            if(shufflePL == false)
+            if (shufflePL == false)
             {
                 unshuffledPL.Clear();
                 i = 0;
@@ -494,7 +524,7 @@ namespace OcarinaPlayer
             {
                 i = Playlist.SelectedIndex - 1;
                 RoutedEventArgs ar = new RoutedEventArgs();
-                btnNext_Click(sender,ar);
+                btnNext_Click(sender, ar);
             }
         }
 
@@ -505,7 +535,7 @@ namespace OcarinaPlayer
             TimeSpan tomove = new TimeSpan(0, (int)(Math.Floor(seekbar.Value / 60)), (int)(Math.Floor(seekbar.Value % 60)));
             waveSource.SetPosition(tomove);
             soundOut.Play();
-            if(aTimer.IsEnabled == false)
+            if (aTimer.IsEnabled == false)
             {
                 aTimer.Start();
             }
@@ -527,7 +557,7 @@ namespace OcarinaPlayer
 
         private void loop_Click(object sender, RoutedEventArgs e)
         {
-            if(loop == false)
+            if (loop == false)
             {
                 loop = true;
                 Color color = (Color)ColorConverter.ConvertFromString("#3594ff");
