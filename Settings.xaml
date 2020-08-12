@@ -16,8 +16,6 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Content="Settings" FontSize="26" Grid.Row="0" HorizontalContentAlignment="Center"></Label>
-        <Viewbox Height="28" Grid.Row="1" >
-            <CheckBox Content="Allow Discord Rich Presence"/>
-        </Viewbox>
+        <CheckBox Content="Allow Discord Rich Presence" Grid.Row="1" FontSize="18" Width="250" Height="40" Margin="234,10,175,304"/>
     </Grid>
 </Window>

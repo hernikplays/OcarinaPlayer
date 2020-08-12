@@ -5,8 +5,11 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using DiscordRPC;
 using DiscordRPC.Logging;
+using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 
 namespace OcarinaPlayer
 {
@@ -17,7 +20,13 @@ namespace OcarinaPlayer
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            
+            Config config = Config.getConf();
+            Color primary = (Color)ColorConverter.ConvertFromString(config.PrimaryColor);
+            Color secondary = (Color)ColorConverter.ConvertFromString(config.SecondaryColor);
+            IBaseTheme baseTheme = (config.DarkBase == false)?Theme.Light:Theme.Dark;
+
+            ITheme theme = Theme.Create(baseTheme, primary, secondary);
+            ResourceDictionaryExtensions.SetTheme(Current.Resources,theme);
         }
     }
 }

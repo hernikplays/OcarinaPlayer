@@ -36,8 +36,7 @@ namespace OcarinaPlayer
     public partial class MainWindow : Window
     {
         private DiscordRpcClient client = new DiscordRpcClient("690238946378121296");
-        private string configPath = Path.Combine(Environment.GetFolderPath(
-    Environment.SpecialFolder.ApplicationData), "OcarinaPlayer\\appconfig.json");
+        
         private Config config;
 
         public MainWindow()
@@ -47,28 +46,8 @@ namespace OcarinaPlayer
         }
         private void OnLoad(object sender, RoutedEventArgs e)
         {
-            //CHECK FOR CONFIG
-            MessageBox.Show(configPath + "\n" + System.IO.File.Exists(configPath).ToString());
-            if (System.IO.File.Exists(configPath) == false)
-            {
-                var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OcarinaPlayer");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-                config = new Config();
-                config.EnableDRPC = true;
-                config.Lang = "en";
-                string json = JsonConvert.SerializeObject(config);
-                System.IO.File.WriteAllText(configPath, json);
-            }
-            else
-            {
-                string json = System.IO.File.ReadAllText(configPath);
-                config = JsonConvert.DeserializeObject<Config>(json);
-            }
-
-
+            config = Config.getConf();
+            
             seekbar.IsEnabled = false;
 
             if (config.EnableDRPC == true)

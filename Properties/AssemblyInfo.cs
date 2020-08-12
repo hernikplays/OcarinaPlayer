@@ -7,12 +7,12 @@ using System.Windows;
 // Obecné informace o sestavení se řídí přes následující 
 // sadu atributů. Změnou hodnot těchto atributů se upraví informace
 // přidružené k sestavení.
-[assembly: AssemblyTitle("OcarinaPlayer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Ocarina Music Player")]
+[assembly: AssemblyDescription("Ocarina is a simple and lightweight music player")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("OcarinaPlayer")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright © hernikplays, 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // Můžete zadat všechny hodnoty nebo nastavit výchozí číslo buildu a revize
 // pomocí zástupného znaku * takto:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.4.0.0")]
+[assembly: AssemblyFileVersion("0.4.0.0")]
