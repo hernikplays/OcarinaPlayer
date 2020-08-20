@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:OcarinaPlayer"
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800"
@@ -16,6 +17,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Content="Settings" FontSize="26" Grid.Row="0" HorizontalContentAlignment="Center"></Label>
-        <CheckBox Content="Allow Discord Rich Presence" Grid.Row="1" FontSize="18" Width="250" Height="40" Margin="234,10,175,304"/>
+        <Label Content="Allow Discord Rich Presence" FontSize="20" FontWeight="SemiBold" Width="280" Height="40" Margin="234,50,208,329" Grid.RowSpan="2"/>
+        <CheckBox Grid.Row="1" FontSize="18" Margin="389,26,371,307"/>
+        <Label Content="Primary Color" Grid.Row="1" FontSize="20" FontWeight="SemiBold" Width="140" Height="40" Margin="93,41,559,283"></Label>
+        <materialDesign:ColorPicker Grid.Row="1" Width="300" Height="100" Margin="10,81,482,183"></materialDesign:ColorPicker>
     </Grid>
 </Window>
