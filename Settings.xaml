@@ -34,10 +34,10 @@
                 <Label Content="Dark Theme" Grid.Row="0" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Height="40" Margin="110,175,134,150"/>
                 <CheckBox Grid.Row="0" Grid.Column="0" FontSize="18" Margin="157,215,200,118" Name="DarkCheck"/>
                 <Label Content="Language" Grid.Row="0" Grid.Column="1" FontSize="20" FontWeight="SemiBold" Height="40" Margin="159.2,175,130.8,149.8"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" Margin="140.2,215,108.8,121.8" Name="lang">
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="140.2,215,108.8,121.8" Name="lang" SelectedValuePath="Content">
                     <ComboBoxItem IsSelected="True" Content="English"></ComboBoxItem>
                 </ComboBox>
-                <Button Margin="319,323,319.8,9.8" Grid.ColumnSpan="2">Save</Button>
+                <Button Margin="319,323,319.8,9.8" Grid.ColumnSpan="2" Click="Button_Click">Save</Button>
             </Grid>
 
         </Grid>

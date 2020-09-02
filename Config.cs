@@ -19,8 +19,7 @@ namespace OcarinaPlayer
 
         public static Config getConf()
         {
-            string configPath = Path.Combine(Environment.GetFolderPath(
-    Environment.SpecialFolder.ApplicationData), "OcarinaPlayer\\appconfig.json");
+            string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OcarinaPlayer\\appconfig.json");
         //CHECK FOR CONFIG
         Config config = new Config();
             if (File.Exists(configPath) == false)
@@ -32,7 +31,7 @@ namespace OcarinaPlayer
                 }
                 config = new Config();
                 config.EnableDRPC = true;
-                config.Lang = "en";
+                config.Lang = "English";
                 config.PrimaryColor = "#1eb6ff";
                 config.SecondaryColor = "#3594ff";
                 config.DarkBase = false;
