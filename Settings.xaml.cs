@@ -19,9 +19,19 @@ namespace OcarinaPlayer
     /// </summary>
     public partial class Settings : Window
     {
+        Config config = Config.getConf();
         public Settings()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            rpc.IsChecked = (config.EnableDRPC == true) ? true : false;
+            DarkCheck.IsChecked = (config.DarkBase == true) ? true : false;
+            lang.SelectedItem = config.Lang;
+            primary.Color = (Color)ColorConverter.ConvertFromString(config.PrimaryColor);
+            secondary.Color = (Color)ColorConverter.ConvertFromString(config.SecondaryColor);
         }
     }
 }
