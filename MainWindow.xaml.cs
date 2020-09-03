@@ -281,7 +281,7 @@ namespace OcarinaPlayer
                     albumArt.Source = new BitmapImage(new Uri("assets/img/noalbum.png", UriKind.Relative));
                 }
                 soundOut.Initialize(waveSource);
-                soundOut.Volume = pausedVol;
+                soundOut.Volume = Convert.ToSingle(volumeSlider.Value);
 
                 soundOut.Play();
 
