@@ -539,13 +539,13 @@ namespace OcarinaPlayer
             if (loop == false)
             {
                 loop = true;
-                Color color = (Color)ColorConverter.ConvertFromString("#3594ff");
+                Color color = (Color)ColorConverter.ConvertFromString(config.SecondaryColor);
                 loopButton.Background = new SolidColorBrush(color);
             }
             else
             {
                 loop = false;
-                Color color = (Color)ColorConverter.ConvertFromString("#1eb6ff");
+                Color color = (Color)ColorConverter.ConvertFromString(config.PrimaryColor);
                 loopButton.Background = new SolidColorBrush(color);
             }
         }
