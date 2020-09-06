@@ -36,7 +36,7 @@ namespace OcarinaPlayer
     public partial class MainWindow : Window
     {
         private DiscordRpcClient client = new DiscordRpcClient("690238946378121296");
-        
+
         private Config config;
 
         public MainWindow()
@@ -47,7 +47,7 @@ namespace OcarinaPlayer
         private void OnLoad(object sender, RoutedEventArgs e)
         {
             config = Config.getConf();
-            
+
             seekbar.IsEnabled = false;
 
             if (config.EnableDRPC == true)
@@ -475,24 +475,27 @@ namespace OcarinaPlayer
 
         private void shuffle_Click(object sender, RoutedEventArgs e)
         {
-            if (shufflePL == false)
+            if (file.Any())
             {
-                unshuffledPL.Clear();
-                i = 0;
-                shufflePL = true;
-                unshuffledPL = file;
-                file.Shuffle();
-                Color color = (Color)ColorConverter.ConvertFromString("#3594ff");
-                shuffle.Background = new SolidColorBrush(color);
-            }
-            else
-            {
-                shufflePL = false;
-                i = unshuffledPL.IndexOf(file[i]);
-                //file.Clear(); 
-                file = unshuffledPL;
-                Color color = (Color)ColorConverter.ConvertFromString("#1eb6ff");
-                shuffle.Background = new SolidColorBrush(color);
+                if (shufflePL == false)
+                {
+                    unshuffledPL.Clear();
+                    i = 0;
+                    shufflePL = true;
+                    unshuffledPL = file;
+                    file.Shuffle();
+                    Color color = (Color)ColorConverter.ConvertFromString(config.SecondaryColor);
+                    shuffle.Background = new SolidColorBrush(color);
+                }
+                else
+                {
+                    shufflePL = false;
+                    i = unshuffledPL.IndexOf(file[i]);
+                    //file.Clear(); 
+                    file = unshuffledPL;
+                    Color color = (Color)ColorConverter.ConvertFromString(config.PrimaryColor);
+                    shuffle.Background = new SolidColorBrush(color);
+                }
             }
         }
 
@@ -517,7 +520,9 @@ namespace OcarinaPlayer
             if (aTimer.IsEnabled == false)
             {
                 aTimer.Start();
+                MessageBox.Show("Start timer");
             }
+            aTimer.Start();
             reposition = false;
         }
 
