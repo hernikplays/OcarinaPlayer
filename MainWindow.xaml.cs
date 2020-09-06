@@ -520,7 +520,6 @@ namespace OcarinaPlayer
             if (aTimer.IsEnabled == false)
             {
                 aTimer.Start();
-                MessageBox.Show("Start timer");
             }
             aTimer.Start();
             reposition = false;
