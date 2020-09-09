@@ -80,7 +80,24 @@ namespace OcarinaPlayer
                     }
                 });
             }
+            var folderfilelist = Directory.GetFiles(config.MusicFolderPath);
+            var typeArray = CodecFactory.SupportedFilesFilterEn.Replace("Supported Files|","").Split(';');
+            List<string> musicList = new List<string>();
+            foreach (var item in folderfilelist)
+            {
+                foreach (var type in typeArray)
+                {
+                    if (item.EndsWith(type.Replace("*", "")))
+                    {
+                        musicList.Add(item);
+                    }
+                }
+            }
+            MessageBox.Show(musicList[0]);
+
         }
+
+        
 
         public ISoundOut soundOut;
         public IWaveSource waveSource;
@@ -559,5 +576,7 @@ namespace OcarinaPlayer
             var settWindow = new Settings();
             settWindow.ShowDialog();
         }
+
+        
     }
 }

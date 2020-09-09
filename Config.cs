@@ -39,6 +39,7 @@ namespace OcarinaPlayer
                 config.SecondaryColor = "#3594ff";
                 config.DarkBase = false;
                 config.Version = 1.0;
+                config.MusicFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
                 string json = JsonConvert.SerializeObject(config);
                 File.WriteAllText(configPath, json);
                 return config;
@@ -55,5 +56,7 @@ namespace OcarinaPlayer
                 return config;
             }
         }
+
+        
     }
 }
