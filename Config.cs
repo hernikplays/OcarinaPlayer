@@ -11,11 +11,14 @@ namespace OcarinaPlayer
 {
     class Config
     {
+        private static readonly double currVer = 1.0;
         public bool EnableDRPC { get; set; }
         public string Lang { get; set; }
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
         public bool DarkBase { get; set; }
+        public string MusicFolderPath { get; set; }
+        public double Version { get; set; }
 
         public static Config getConf()
         {
@@ -35,6 +38,7 @@ namespace OcarinaPlayer
                 config.PrimaryColor = "#1eb6ff";
                 config.SecondaryColor = "#3594ff";
                 config.DarkBase = false;
+                config.Version = 1.0;
                 string json = JsonConvert.SerializeObject(config);
                 File.WriteAllText(configPath, json);
                 return config;
@@ -43,6 +47,11 @@ namespace OcarinaPlayer
             {
                 string json = File.ReadAllText(configPath);
                 config = JsonConvert.DeserializeObject<Config>(json);
+                if(config.Version != currVer || config.Version == null)
+                {
+                    File.Delete(configPath);
+                    getConf();
+                }
                 return config;
             }
         }
