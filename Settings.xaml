@@ -44,7 +44,13 @@
                 <ComboBox Grid.Row="0" Grid.Column="1" Margin="140.2,215,108.8,121.8" Name="lang" SelectedValuePath="Content">
                     <ComboBoxItem IsSelected="True" Content="English"></ComboBoxItem>
                 </ComboBox>
+                <Label Content="Music Folder" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Margin="110,267,151.8,69"/>
+                <TextBox Grid.Column="0"></TextBox>
                 <Button Margin="319,323,319.8,9.8" Grid.ColumnSpan="2" Click="Button_Click">Save</Button>
+                <TextBox Height="30" Width="150" Margin="92,296,146.8,39.6"></TextBox>
+                <Button Grid.Column="0" Height="30" Width="30" Padding="0" Margin="247,296,100.8,39.6" >
+                    <materialDesign:PackIcon Kind="Folder" Foreground="Black" Width="27" Height="27" Margin="0,0,0,0" Name="playButton" />
+                </Button>
             </Grid>
 
         </Grid>

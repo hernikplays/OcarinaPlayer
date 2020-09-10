@@ -93,7 +93,10 @@ namespace OcarinaPlayer
                     }
                 }
             }
-            MessageBox.Show(musicList[0]);
+            if (!musicList.Any())
+            {
+                FolderList.Items.Add("None Found");
+            }
 
         }
 
