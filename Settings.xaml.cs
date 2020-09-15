@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Windows.Forms;
 
 namespace OcarinaPlayer
 {
@@ -33,6 +34,7 @@ namespace OcarinaPlayer
             lang.SelectedValue = config.Lang;
             primary.Color = (Color)ColorConverter.ConvertFromString(config.PrimaryColor);
             secondary.Color = (Color)ColorConverter.ConvertFromString(config.SecondaryColor);
+            MusicPath.Text = config.MusicFolderPath;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -43,11 +45,23 @@ namespace OcarinaPlayer
             saveme.Lang = lang.Text;
             saveme.PrimaryColor = "#" + primary.Color.R.ToString("X2") + primary.Color.G.ToString("X2") + primary.Color.B.ToString("X2");
             saveme.SecondaryColor = "#" + secondary.Color.R.ToString("X2") + secondary.Color.G.ToString("X2") + secondary.Color.B.ToString("X2");
-
+            saveme.MusicFolderPath = MusicPath.Text == "" ? Environment.GetFolderPath(Environment.SpecialFolder.MyMusic):MusicPath.Text;
+            saveme.Version = config.Version;
             string json = JsonConvert.SerializeObject(saveme);
             string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OcarinaPlayer\\appconfig.json");
             File.WriteAllText(configPath, json);
             Close();
+        }
+
+        private void FolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog
+            {
+                Description = "Select Music Folder...",
+                ShowNewFolderButton=true
+            };
+            dialog.ShowDialog();
+            MusicPath.Text = dialog.SelectedPath;
         }
     }
 }

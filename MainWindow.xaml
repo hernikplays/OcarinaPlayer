@@ -750,18 +750,19 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Label Content="Song Queue:" FontSize="16" Margin="9,0,0,0"/>
-            <ListBox HorizontalAlignment="Left" Height="252" Margin="0,20,-240,0" VerticalAlignment="Top" Width="246" Name="Playlist" MouseLeftButtonUp="Playlist_Click">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding}" FontSize="17"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
+            <ScrollViewer Margin="0,0,-140.2,-0.6">
+                <ListBox HorizontalAlignment="Left" Height="252" Margin="0,20,-240,0" VerticalAlignment="Top" Width="246" Name="Playlist" MouseLeftButtonUp="Playlist_Click">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding}" FontSize="17"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
         </Grid>
-        <ListBox Margin="324,81,48.6,190.4" Name="FolderList">
-                
-        </ListBox>
+        <ScrollViewer Margin="344,75,31.6,138.4">
+            <ListBox Name="FolderList" MouseLeftButtonUp="FolderList_MouseLeftButtonUp" FontSize="17" Height="429" Width="591"/>
+        </ScrollViewer>
         <Grid VerticalAlignment="Bottom" Height="392" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>

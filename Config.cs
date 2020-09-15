@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace OcarinaPlayer
 {
@@ -48,9 +49,10 @@ namespace OcarinaPlayer
             {
                 string json = File.ReadAllText(configPath);
                 config = JsonConvert.DeserializeObject<Config>(json);
-                if(config.Version != currVer || config.Version == null)
+                if(config.Version != currVer)
                 {
                     File.Delete(configPath);
+                    MessageBox.Show("Regenerating config");
                     getConf();
                 }
                 return config;

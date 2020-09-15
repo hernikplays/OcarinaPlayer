@@ -82,14 +82,16 @@ namespace OcarinaPlayer
             }
             var folderfilelist = Directory.GetFiles(config.MusicFolderPath);
             var typeArray = CodecFactory.SupportedFilesFilterEn.Replace("Supported Files|","").Split(';');
-            List<string> musicList = new List<string>();
+            List<FolderListItem> musicList = new List<FolderListItem>();
             foreach (var item in folderfilelist)
             {
                 foreach (var type in typeArray)
                 {
                     if (item.EndsWith(type.Replace("*", "")))
                     {
-                        musicList.Add(item);
+                        var musobj = new FolderListItem(null,item);
+                        //musobj.Path = item;
+                        musicList.Add(musobj);
                     }
                 }
             }
@@ -97,11 +99,29 @@ namespace OcarinaPlayer
             {
                 FolderList.Items.Add("None Found");
             }
+            else
+            {
+                foreach (var song in musicList)
+                {
+                    var playing = TagLib.File.Create(song.Path);
+                    FolderList.DisplayMemberPath = "Name";
+                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                    {
+                        var filename = Path.GetFileName(song.Path);
+                        FolderList.Items.Add(new FolderListItem(filename,song.Path));
+                    }
+                    else
+                    {
+                        var name = playing.Tag.FirstPerformer == null || playing.Tag.FirstPerformer.Length == 0 ? "Unknown" : playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
+                        FolderList.Items.Add(new FolderListItem(name, song.Path));
+                        
+                    }
+                }
+            }
 
         }
 
         
-
         public ISoundOut soundOut;
         public IWaveSource waveSource;
         private List<string> file = new List<string>();
@@ -120,7 +140,7 @@ namespace OcarinaPlayer
             {
                 shufflePL = false;
                 unshuffledPL.Clear();
-                Color color = (Color)ColorConverter.ConvertFromString("#1eb6ff");
+                Color color = (Color)ColorConverter.ConvertFromString(config.PrimaryColor);
                 shuffle.Background = new SolidColorBrush(color);
 
             }
@@ -232,7 +252,7 @@ namespace OcarinaPlayer
                         client.SetPresence(new RichPresence()
                         {
                             Details = "Listening to " + playing.Tag.Title,
-                            State = "by " + playing.Tag.FirstPerformer,
+                            State = "by " + playing.Tag.FirstPerformer == null || playing.Tag.FirstPerformer.Length == 0 ? playing.Tag.FirstPerformer : "Unknown",
                             Timestamps = Timestamps.Now,
                             Assets = new Assets()
                             {
@@ -580,6 +600,29 @@ namespace OcarinaPlayer
             settWindow.ShowDialog();
         }
 
-        
+        private void FolderList_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var item = ItemsControl.ContainerFromElement(FolderList, e.OriginalSource as DependencyObject) as ListBoxItem;
+            if (item != null)
+            {
+                file.Clear();
+                file.Add((FolderList.SelectedItem as FolderListItem).Path);
+                Playlist.Items.Clear();
+                var playing = TagLib.File.Create((FolderList.SelectedItem as FolderListItem).Path);
+                if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                {
+                    var filename = Path.GetFileName((FolderList.SelectedItem as FolderListItem).Path);
+                    Playlist.Items.Add(filename);
+                }
+                else
+                {
+                    Playlist.Items.Add(playing.Tag.FirstPerformer + " - " + playing.Tag.Title);
+                }
+                if (soundOut != null)
+                    soundOut.Dispose();
+                RoutedEventArgs r = new RoutedEventArgs();
+                play(sender,r);
+            }
+        }
     }
 }
