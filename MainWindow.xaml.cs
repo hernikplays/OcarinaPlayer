@@ -27,6 +27,10 @@ using CSCore.CoreAudioAPI;
 using CSCore.SoundOut;
 using System.Xml.Schema;
 using Newtonsoft.Json;
+using System.Net;
+using System.Text.RegularExpressions;
+using MaterialXAMLDialogs;
+using MaterialXAMLDialogs.Enums;
 
 namespace OcarinaPlayer
 {
@@ -38,6 +42,7 @@ namespace OcarinaPlayer
         private DiscordRpcClient client = new DiscordRpcClient("690238946378121296");
 
         private Config config;
+        private readonly double Version = 0.2;
 
         public MainWindow()
         {
@@ -46,6 +51,38 @@ namespace OcarinaPlayer
         }
         private void OnLoad(object sender, RoutedEventArgs e)
         {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/hernikplays/OcarinaPlayer/releases/latest");
+            request.UserAgent = "hernikplays";
+            WebResponse response = request.GetResponse();
+
+            using (Stream dataStream = response.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(dataStream);
+                string responseFromServer = reader.ReadToEnd();
+                string pattern = @"""tag_name"":""(?:(?=(\\?)).)*?\1""";
+                Match m = Regex.Match(responseFromServer, pattern);
+                MessageBox.Show(m.Value.Replace("\"", "").Replace("tag_name:",""));
+                // FIX THIS VV
+                var ver = Convert.ToInt32(m.Value.Replace("\"", "").Replace("tag_name:", ""));
+                if (ver < Version)
+                {
+                    var config = new AlertDialogConfiguration
+                    {
+                        Title = "Confirm",
+                        SupportingText = "This is a Alert dialog which requires User intervention to proceed",
+                        DialogButtons = DialogButtons.YesNo,
+                        IconKind = PackIconKind.Alert,
+                        ShowAdditionalOption = true,
+                        AdditionalOptionText = "Don't show this again",
+                        IsAdditionalOptionCheched = false
+                    };
+                    var dialog = new AlertDialog(config);
+                    var result = dialog.Show("Root");
+                }
+            }
+
+            response.Close();
+
             config = Config.getConf();
 
             seekbar.IsEnabled = false;
