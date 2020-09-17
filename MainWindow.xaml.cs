@@ -29,8 +29,7 @@ using System.Xml.Schema;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text.RegularExpressions;
-using MaterialXAMLDialogs;
-using MaterialXAMLDialogs.Enums;
+using System.Globalization;
 
 namespace OcarinaPlayer
 {
@@ -63,21 +62,10 @@ namespace OcarinaPlayer
                 Match m = Regex.Match(responseFromServer, pattern);
                 MessageBox.Show(m.Value.Replace("\"", "").Replace("tag_name:",""));
                 // FIX THIS VV
-                var ver = Convert.ToInt32(m.Value.Replace("\"", "").Replace("tag_name:", ""));
-                if (ver < Version)
+                var ver = float.Parse(m.Value.Replace("\"", "").Replace("tag_name:", ""), CultureInfo.InvariantCulture);
+                if (ver > Version)
                 {
-                    var config = new AlertDialogConfiguration
-                    {
-                        Title = "Confirm",
-                        SupportingText = "This is a Alert dialog which requires User intervention to proceed",
-                        DialogButtons = DialogButtons.YesNo,
-                        IconKind = PackIconKind.Alert,
-                        ShowAdditionalOption = true,
-                        AdditionalOptionText = "Don't show this again",
-                        IsAdditionalOptionCheched = false
-                    };
-                    var dialog = new AlertDialog(config);
-                    var result = dialog.Show("Root");
+
                 }
             }
 
@@ -661,5 +649,7 @@ namespace OcarinaPlayer
                 play(sender,r);
             }
         }
+
+       
     }
 }
