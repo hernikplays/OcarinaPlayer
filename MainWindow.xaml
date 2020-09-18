@@ -761,9 +761,9 @@
                 </ListBox>
             </ScrollViewer>
         </Grid>
-        <ScrollViewer Margin="344,75,31.6,138.4">
+        
             <ListBox Name="FolderList" MouseLeftButtonUp="FolderList_MouseLeftButtonUp" FontSize="17" Height="429" Width="591"/>
-        </ScrollViewer>
+        
         <Grid VerticalAlignment="Bottom" Height="392" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>

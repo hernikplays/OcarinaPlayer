@@ -30,6 +30,8 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using SweetAlertSharp;
+using SweetAlertSharp.Enums;
 
 namespace OcarinaPlayer
 {
@@ -41,7 +43,7 @@ namespace OcarinaPlayer
         private DiscordRpcClient client = new DiscordRpcClient("690238946378121296");
 
         private Config config;
-        private readonly double Version = 0.2;
+        private readonly double Version = 0.4;
 
         public MainWindow()
         {
@@ -60,12 +62,22 @@ namespace OcarinaPlayer
                 string responseFromServer = reader.ReadToEnd();
                 string pattern = @"""tag_name"":""(?:(?=(\\?)).)*?\1""";
                 Match m = Regex.Match(responseFromServer, pattern);
-                MessageBox.Show(m.Value.Replace("\"", "").Replace("tag_name:",""));
-                // FIX THIS VV
                 var ver = float.Parse(m.Value.Replace("\"", "").Replace("tag_name:", ""), CultureInfo.InvariantCulture);
                 if (ver > Version)
                 {
+                    var alert = new SweetAlert();
+                    alert.Caption = "New version released";
+                    alert.Message = "Click 'Yes' to download new version from GitHub";
+                    alert.MsgImage = SweetAlertImage.INFORMATION;
+                    alert.MsgButton = SweetAlertButton.YesNo;
+                    alert.OkText = "Yes";
+                    alert.CancelText = "No";
 
+                    var result = alert.ShowDialog();
+                    if(result.ToString() == "OK")
+                    {
+                        System.Diagnostics.Process.Start("https://github.com/hernikplays/OcarinaPlayer/releases/latest");
+                    }
                 }
             }
 
