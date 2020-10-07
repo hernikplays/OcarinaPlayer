@@ -8,7 +8,7 @@ namespace OcarinaPlayer
 {
     static class RandomizeList
     {
-        private static Random rng = new Random();
+        private static readonly Random rng = new Random();
 
         public static void Shuffle<T>(this IList<T> list)
         {

@@ -17,6 +17,32 @@
      Background="{DynamicResource MaterialDesignPaper}"
      FontFamily="{DynamicResource MaterialDesignFont}" Height="732" Width="1000">
     <Window.Resources>
+        <DrawingImage x:Key="playSVG">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+                    <GeometryDrawing Brush="#FFF" Geometry="F1 M24,24z M0,0z M8,5L8,19 19,12z" />
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <DrawingImage x:Key="skip">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+                    <GeometryDrawing Brush="#FFF" Geometry="F1 M24,24z M0,0z M6,18L14.5,12 6,6 6,18z M16,6L16,18 18,18 18,6 16,6z" />
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+
+        <DrawingImage x:Key="prev">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+                    <GeometryDrawing Brush="#FFF" Geometry="F1 M24,24z M0,0z M6,6L8,6 8,18 6,18z M9.5,12L18,18 18,6z" />
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+
         <Style x:Key="MaterialDesignHorizontalTrackRepeatButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -729,6 +755,23 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo>
+            <TaskbarItemInfo.ThumbButtonInfos>
+                <ThumbButtonInfo ImageSource="{StaticResource prev}"
+                                 Description="Previous"
+                                 Click="prevThumb"/>
+                <ThumbButtonInfo ImageSource="{StaticResource playSVG}"
+                                 Description="Play/Pause" 
+                                 Click="playThumb"/>
+                <ThumbButtonInfo ImageSource="{StaticResource skip}"
+                                 Description="Next" 
+                                 Click="nextThumb"/>
+            </TaskbarItemInfo.ThumbButtonInfos>
+        </TaskbarItemInfo>
+    </Window.TaskbarItemInfo>
+
     <Grid>
         <Grid VerticalAlignment="Top">
             <Menu DockPanel.Dock="Top">

@@ -142,14 +142,14 @@ namespace OcarinaPlayer
                 {
                     var playing = TagLib.File.Create(song.Path);
                     FolderList.DisplayMemberPath = "Name";
-                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                    if (string.IsNullOrEmpty(playing.Tag.Title))
                     {
                         var filename = Path.GetFileName(song.Path);
                         FolderList.Items.Add(new FolderListItem(filename,song.Path));
                     }
                     else
                     {
-                        var name = playing.Tag.FirstPerformer == null || playing.Tag.FirstPerformer.Length == 0 ? "Unknown" : playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
+                        var name = string.IsNullOrEmpty(playing.Tag.Title) ? "Unknown" : playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
                         FolderList.Items.Add(new FolderListItem(name, song.Path));
                         
                     }
@@ -194,7 +194,7 @@ namespace OcarinaPlayer
                 {
                     file.Add(files); //saves all files into list
                     var playing = TagLib.File.Create(files);
-                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                    if (string.IsNullOrEmpty(playing.Tag.Title))
                     {
                         var filename = Path.GetFileName(files);
                         Playlist.Items.Add(filename);
@@ -227,7 +227,7 @@ namespace OcarinaPlayer
 
                 if (config.EnableDRPC == true)
                 {
-                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                    if (string.IsNullOrEmpty(playing.Tag.Title))
                     {
                         var filename = Path.GetFileName(file[i]);
                         client.SetPresence(new RichPresence()
@@ -269,7 +269,7 @@ namespace OcarinaPlayer
                 var playing = TagLib.File.Create(file[i]);
                 if (config.EnableDRPC == true)
                 {
-                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                    if (string.IsNullOrEmpty(playing.Tag.Title))
                     {
                         var filename = Path.GetFileName(file[i]);
                         client.SetPresence(new RichPresence()
@@ -313,7 +313,7 @@ namespace OcarinaPlayer
                 var playing = TagLib.File.Create(file[i]);
                 if (config.EnableDRPC == true)
                 {
-                    if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
+                    if (string.IsNullOrEmpty(playing.Tag.Title))
                     {
                         var filename = Path.GetFileName(file[i]);
                         client.SetPresence(new RichPresence()
@@ -459,6 +459,24 @@ namespace OcarinaPlayer
         public void stop(object sender, RoutedEventArgs e)
         {
             soundOut.Stop();
+        }
+
+        public void prevThumb(object sender, EventArgs e)
+        {
+            var ar = new RoutedEventArgs();
+            btnPrev_Click(sender,ar);
+        }
+
+        public void playThumb(object sender, EventArgs e)
+        {
+            var ar = new RoutedEventArgs();
+            play(sender, ar);
+        }
+
+        public void nextThumb(object sender, EventArgs e)
+        {
+            var ar = new RoutedEventArgs();
+            btnNext_Click(sender, ar);
         }
 
         private void savePL(object sender, RoutedEventArgs e)
