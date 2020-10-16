@@ -166,7 +166,7 @@ namespace OcarinaPlayer
                 }
             }
 
-            string[] args = App.mArgs;
+            /*string[] args = App.mArgs;
             List<string> validArgs = new List<string>();
             if (args.Any())
             {
@@ -198,7 +198,7 @@ namespace OcarinaPlayer
                         }
                     }
                 }
-            }
+            }*/
 
         }
 

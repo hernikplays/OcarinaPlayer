@@ -31,11 +31,11 @@ namespace OcarinaPlayer
             ITheme theme = Theme.Create(baseTheme, primary, secondary);
             ResourceDictionaryExtensions.SetTheme(Current.Resources,theme);
             File.WriteAllText("./log.txt", "e.Args[0]");
-            if (e.Args.Length > 0)
+            /*if (e.Args.Length > 0)
             {
                 File.WriteAllText("./log.txt",e.Args[0]);
                 mArgs = e.Args;
-            }
+            }*/
         }
 
     }
