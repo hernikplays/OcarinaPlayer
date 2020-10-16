@@ -1,0 +1,24 @@
+{
+    "SongQueue":"Fronta",
+    "ArtistDefault": "Klikněte na 'Soubor > Otevřít' pro vybrání písní...",
+    "FileText":"Soubor",
+    "EditText":"Upravit",
+    "OpenFile":"Otevřít soubor",
+    "OpenPL":"Otevřít playlist",
+    "SavePL":"Uložit playlist",
+    "ClearQueue":"Vyčistit frontu",
+    "Exit":"Odejít",
+
+    "Settings":"Nastavení",
+    "AllowRPC":"Povolit Discord Rich Presence",
+    "PrimaryColor":"Hlavní Barva",
+    "SecondaryColor":"Vedlejší Barva",
+    "DarkTheme":"Temný Vzhled",
+    "Language":"Jazyk",
+    "MusicFolder":"Složka s Hudbou",
+    "Save":"Uložit",
+
+    "PrevThumb":"Předchozí",
+    "PlayThumb":"Přehrát/Pozastavit",
+    "NextThumb":"Další"
+}

@@ -44,6 +44,7 @@ namespace OcarinaPlayer
 
         private Config config;
         private readonly double Version = 0.4;
+        private LanguageStrings lang;
 
         public MainWindow()
         {
@@ -85,21 +86,30 @@ namespace OcarinaPlayer
 
             config = Config.getConf();
 
+            //SETTING TEXT TO LANG
+            lang = LanguageStrings.GetStrings(config.Lang);
+            
+
+            FileH.Header = lang.FileText;
+            OFile.Header = lang.OpenFile;
+            Opl.Header = lang.OpenPl;
+            Spl.Header = lang.SavePl;
+            ClearQ.Header = lang.ClearQueue;
+            ExitBtn.Header = lang.Exit;
+            EditH.Header = lang.EditText;
+            SettingsBtn.Header = lang.Settings;
+            QLabel.Content = lang.SongQueue;
+            artistSong.Text = lang.ArtistDefault;
+
+            NextThumb.Description = lang.NextThumb;
+            PrevThumb.Description = lang.PrevThumb;
+            PlayThumb.Description = lang.PlayThumb;
+
             seekbar.IsEnabled = false;
 
             if (config.EnableDRPC == true)
             {
                 client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
-
-                client.OnReady += (senderRPC, eRPC) =>
-                {
-                    Console.WriteLine("Received Ready from user {0}", eRPC.User.Username);
-                };
-
-                client.OnPresenceUpdate += (senderRPC, eRPC) =>
-                {
-                    Console.WriteLine("Received Update! {0}", eRPC.Presence);
-                };
 
                 //Connect to the RPC
                 client.Initialize();

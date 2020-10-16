@@ -25,30 +25,31 @@
                 <RowDefinition Height="55"></RowDefinition>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Content="Settings" FontSize="26" Grid.Row="0" HorizontalContentAlignment="Center"></Label>
+            <Label Content="Settings" FontSize="26" Grid.Row="0" HorizontalContentAlignment="Center" Name="SettingsLab"></Label>
 
-            <Label Content="Allow Discord Rich Presence" FontSize="20" FontWeight="SemiBold" Margin="259,46,241,325" Grid.RowSpan="2"/>
+            <Label Content="Allow Discord Rich Presence" FontSize="20" FontWeight="SemiBold" Margin="259,46,229,325" Grid.RowSpan="2" Name="AllowRP"/>
             <CheckBox Grid.Row="1" FontSize="18" Margin="376,22,372,316" Name="rpc"/>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Content="Primary Color" Grid.Row="0" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Height="40" Margin="119,35,125,290"/>
+                <Label Content="Primary Color" Grid.Row="0" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Height="40" Margin="119,35,125,290" Name="Prim"/>
                 <materialDesign:ColorPicker Grid.Row="0" Grid.Column="0" Height="100" Margin="37,75,50,190" Name="primary"/>
-                <Label Content="Secondary Color" Grid.Row="0" Grid.Column="1" FontSize="20" FontWeight="SemiBold" Height="40" Margin="126,35,96,290" />
+                <Label Content="Secondary Color" Grid.Row="0" Grid.Column="1" FontSize="20" FontWeight="SemiBold" Height="40" Margin="126,35,96,290" Name="Second"/>
                 <materialDesign:ColorPicker Grid.Row="0" Grid.Column="1" Width="300" Height="100" Margin="50,75,38,190" Name="secondary"></materialDesign:ColorPicker>
-                <Label Content="Dark Theme" Grid.Row="0" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Height="40" Margin="110,175,134,150"/>
+                <Label Content="Dark Theme" Grid.Row="0" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Height="40" Margin="110,175,134,150" Name="DarkTh"/>
                 <CheckBox Grid.Row="0" Grid.Column="0" FontSize="18" Margin="157,215,200,118" Name="DarkCheck"/>
-                <Label Content="Language" Grid.Row="0" Grid.Column="1" FontSize="20" FontWeight="SemiBold" Height="40" Margin="159.2,175,130.8,149.8"/>
+                <Label Content="Language" Grid.Row="0" Grid.Column="1" FontSize="20" FontWeight="SemiBold" Height="40" Margin="159.2,175,130.8,149.8" Name="LangLab"/>
                 <ComboBox Grid.Row="0" Grid.Column="1" Margin="140.2,215,108.8,121.8" Name="lang" SelectedValuePath="Content">
                     <ComboBoxItem IsSelected="True" Content="English"></ComboBoxItem>
+                    <ComboBoxItem IsSelected="False" Content="Czech"></ComboBoxItem>
                 </ComboBox>
-                <Label Content="Music Folder" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Margin="110,267,151.8,69"/>
+                <Label Content="Music Folder" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Margin="60,267,130,69" Name="MusFol" HorizontalContentAlignment="Center"/>
                 <TextBox Grid.Column="0"></TextBox>
-                <Button Margin="319,323,319.8,9.8" Grid.ColumnSpan="2" Click="Button_Click">Save</Button>
+                <Button Margin="319,323,319.8,9.8" Grid.ColumnSpan="2" Click="Button_Click" Name="SaveBtn" Content="Save"></Button>
                 <TextBox Height="30" Width="150" Margin="92,296,146.8,39.6" Name="MusicPath"></TextBox>
-                <Button Grid.Column="0" Height="30" Width="30" Padding="0" Margin="247,296,100.8,39.6" Click="FolderButton_Click">
+                <Button Grid.Column="0" Height="30" Width="30" Padding="0" Margin="247,296,100.8,39.6" Click="FolderButton_Click" >
                     <materialDesign:PackIcon Kind="Folder" Foreground="Black" Width="27" Height="27" Margin="0,0,0,0" Name="playButton" />
                 </Button>
             </Grid>

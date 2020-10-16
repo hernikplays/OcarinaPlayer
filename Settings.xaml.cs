@@ -29,6 +29,16 @@ namespace OcarinaPlayer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            LanguageStrings langu = LanguageStrings.GetStrings(config.Lang);
+            SettingsLab.Content = langu.Settings;
+            AllowRP.Content = langu.AllowRpc;
+            Prim.Content = langu.PrimaryColor;
+            Second.Content = langu.SecondaryColor;
+            DarkTh.Content = langu.DarkTheme;
+            LangLab.Content = langu.Language;
+            MusFol.Content = langu.MusicFolder;
+            SaveBtn.Content = langu.Save;
+
             rpc.IsChecked = (config.EnableDRPC == true);
             DarkCheck.IsChecked = (config.DarkBase == true);
             lang.SelectedValue = config.Lang;
