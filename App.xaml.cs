@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using CSCore.Codecs;
 using DiscordRPC;
 using DiscordRPC.Logging;
 using MaterialDesignColors;
@@ -18,6 +20,7 @@ namespace OcarinaPlayer
     /// </summary>
     public partial class App : Application
     {
+        public static String[] mArgs = {};
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             Config config = Config.getConf();
@@ -27,6 +30,13 @@ namespace OcarinaPlayer
 
             ITheme theme = Theme.Create(baseTheme, primary, secondary);
             ResourceDictionaryExtensions.SetTheme(Current.Resources,theme);
+            File.WriteAllText("./log.txt", "e.Args[0]");
+            if (e.Args.Length > 0)
+            {
+                File.WriteAllText("./log.txt",e.Args[0]);
+                mArgs = e.Args;
+            }
         }
+
     }
 }
