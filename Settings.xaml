@@ -46,7 +46,6 @@
                     <ComboBoxItem IsSelected="False" Content="Czech"></ComboBoxItem>
                 </ComboBox>
                 <Label Content="Music Folder" Grid.Column="0" FontSize="20" FontWeight="SemiBold" Margin="60,267,130,69" Name="MusFol" HorizontalContentAlignment="Center"/>
-                <TextBox Grid.Column="0"></TextBox>
                 <Button Margin="319,323,319.8,9.8" Grid.ColumnSpan="2" Click="Button_Click" Name="SaveBtn" Content="Save"></Button>
                 <TextBox Height="30" Width="150" Margin="92,296,146.8,39.6" Name="MusicPath"></TextBox>
                 <Button Grid.Column="0" Height="30" Width="30" Padding="0" Margin="247,296,100.8,39.6" Click="FolderButton_Click" >

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,13 +44,23 @@ namespace OcarinaPlayer
         private DiscordRpcClient client = new DiscordRpcClient("690238946378121296");
 
         private Config config;
-        private readonly double Version = 0.4;
+        private readonly double Version = 1.0;
         private LanguageStrings lang;
+        private string[] CommArgs;
+        ObservableCollection<string> _npList = new ObservableCollection<string>();
+        private bool shouldDrag = false;
 
         public MainWindow()
         {
             InitializeComponent();
             Closed += onCloseApp;
+            Playlist.ItemsSource = _npList;
+            Style itemContainerStyle = new Style(typeof(ListBoxItem));
+            itemContainerStyle.Setters.Add(new Setter(ListBoxItem.AllowDropProperty, true));
+            itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.PreviewMouseLeftButtonDownEvent, new MouseButtonEventHandler(Playlist_OnPreviewMouseLeftButtonDown)));
+            itemContainerStyle.Setters.Add(new EventSetter(ListBoxItem.DropEvent, new DragEventHandler(Playlist_OnDrop)));
+            Playlist.ItemContainerStyle = itemContainerStyle;
+            KeyDown += new KeyEventHandler(MainWindow_KeyDown);
         }
         private void OnLoad(object sender, RoutedEventArgs e)
         {
@@ -166,6 +177,35 @@ namespace OcarinaPlayer
                 }
             }
 
+            if (CommArgs != null)
+            {
+                bool isValid = false;
+                foreach (var type in typeArray)
+                {
+                    if (CommArgs[0].EndsWith(type.Replace("*", "")))
+                    {
+                        isValid = true;
+                    }
+                }
+                if(isValid)
+                {
+                    var playing = TagLib.File.Create(CommArgs[0]);
+                    if (string.IsNullOrEmpty(playing.Tag.Title))
+                    {
+                        var filename = Path.GetFileName(CommArgs[0]);
+                        Playlist.Items.Add(new FolderListItem(filename, CommArgs[0]));
+                    }
+                    else
+                    {
+                        var name = string.IsNullOrEmpty(playing.Tag.Title)
+                            ? "Unknown"
+                            : playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
+                        Playlist.Items.Add(new FolderListItem(name, CommArgs[0]));
+
+                    }
+                }
+            }
+
         }
 
         
@@ -207,11 +247,11 @@ namespace OcarinaPlayer
                     if (string.IsNullOrEmpty(playing.Tag.Title))
                     {
                         var filename = Path.GetFileName(files);
-                        Playlist.Items.Add(filename);
+                        _npList.Add(filename);
                     }
                     else
                     {
-                        Playlist.Items.Add(playing.Tag.FirstPerformer + " - " + playing.Tag.Title);
+                        _npList.Add(playing.Tag.FirstPerformer + " - " + playing.Tag.Title);
                     }
                 }
             }
@@ -604,17 +644,6 @@ namespace OcarinaPlayer
             }
         }
 
-        private void Playlist_Click(object sender, MouseButtonEventArgs e)
-        {
-            var item = ItemsControl.ContainerFromElement(Playlist, e.OriginalSource as DependencyObject) as ListBoxItem;
-            if (item != null)
-            {
-                i = Playlist.SelectedIndex - 1;
-                RoutedEventArgs ar = new RoutedEventArgs();
-                btnNext_Click(sender, ar);
-            }
-        }
-
         private void seekbar_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             reposition = true;
@@ -635,7 +664,7 @@ namespace OcarinaPlayer
             if (file.Any())
             {
                 file.Clear();
-                Playlist.Items.Clear();
+                _npList.Clear();
             }
             else
             {
@@ -672,16 +701,16 @@ namespace OcarinaPlayer
             {
                 file.Clear();
                 file.Add((FolderList.SelectedItem as FolderListItem).Path);
-                Playlist.Items.Clear();
+                _npList.Clear();
                 var playing = TagLib.File.Create((FolderList.SelectedItem as FolderListItem).Path);
                 if (playing.Tag.Title == null || playing.Tag.Title.Length == 0)
                 {
                     var filename = Path.GetFileName((FolderList.SelectedItem as FolderListItem).Path);
-                    Playlist.Items.Add(filename);
+                    _npList.Add(filename);
                 }
                 else
                 {
-                    Playlist.Items.Add(playing.Tag.FirstPerformer + " - " + playing.Tag.Title);
+                    _npList.Add(playing.Tag.FirstPerformer + " - " + playing.Tag.Title);
                 }
                 if (soundOut != null)
                     soundOut.Dispose();
@@ -690,6 +719,90 @@ namespace OcarinaPlayer
             }
         }
 
-       
+        public void AddCmdArgs(string[] args)
+        {
+            CommArgs = args;
+        }
+
+
+        private void UIElement_OnDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string fileItem in files)
+                {
+                    file.Add(fileItem); //saves all files into list
+                    var playing = TagLib.File.Create(fileItem);
+                    if (string.IsNullOrEmpty(playing.Tag.Title))
+                    {
+                        var filename = Path.GetFileName(fileItem);
+                        _npList.Add(filename);
+                    }
+                    else
+                    {
+                        _npList.Add(playing.Tag.FirstPerformer + " - " + playing.Tag.Title);
+                    }
+                }
+            }
+        }
+
+        private void Playlist_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListBoxItem)
+            {
+                if (e.ClickCount == 2)
+                {
+                    i = (_npList.IndexOf(((ListBoxItem)sender).Content.ToString()) == 0)? _npList.Count-1 : _npList.IndexOf(((ListBoxItem)sender).Content.ToString())-1;
+                    btnNext_Click(sender, new RoutedEventArgs());
+                }
+                shouldDrag = true;
+                ListBoxItem draggedItem = sender as ListBoxItem;
+                DragDrop.DoDragDrop(draggedItem, draggedItem.DataContext, DragDropEffects.Move);
+                draggedItem.IsSelected = true;
+            }
+        }
+
+        private void Playlist_OnDrop(object sender, DragEventArgs e)
+        {
+            if(shouldDrag)
+            {
+                string droppedData = e.Data.GetData(typeof(string)) as string;
+                string target = ((ListBoxItem) (sender)).DataContext as string;
+
+                int removedIdx = Playlist.Items.IndexOf(droppedData);
+                int targetIdx = Playlist.Items.IndexOf(target);
+
+                if (removedIdx < targetIdx)
+                {
+                    _npList.Insert(targetIdx + 1, droppedData);
+                    _npList.RemoveAt(removedIdx);
+                    file.Insert(targetIdx + 1, file[removedIdx]);
+                    file.RemoveAt(removedIdx);
+                }
+                else
+                {
+                    int remIdx = removedIdx + 1;
+                    if (_npList.Count + 1 > remIdx)
+                    {
+                        _npList.Insert(targetIdx, droppedData);
+                        _npList.RemoveAt(remIdx);
+                        file.Insert(targetIdx, file[removedIdx]);
+                        file.RemoveAt(remIdx);
+                    }
+                }
+
+                Playlist.Items.Refresh();
+            }
+        }
+
+        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                play(sender,new RoutedEventArgs());
+            }
+        }
+
     }
 }

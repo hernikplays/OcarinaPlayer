@@ -27,6 +27,14 @@ namespace OcarinaPlayer
 
             ITheme theme = Theme.Create(baseTheme, primary, secondary);
             ResourceDictionaryExtensions.SetTheme(Current.Resources,theme);
+
+            MainWindow wnd = new MainWindow();
+            if (e.Args.Length == 1)
+            {
+                wnd.AddCmdArgs(e.Args);
+            }
+
+            
         }
     }
 }
