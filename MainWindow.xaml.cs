@@ -462,10 +462,10 @@ namespace OcarinaPlayer
                     if (i > file.Count - 1)
                     {
                         i = 0;
-                        if (loop == true)
+                        if (loop)
                         {
-                            RoutedEventArgs ee = new RoutedEventArgs();
-                            play(sender, ee);
+                            
+                            play(sender, new RoutedEventArgs());
                         }
                     }
                     else
@@ -599,7 +599,7 @@ namespace OcarinaPlayer
             {
                 soundOut.Dispose();
             }
-            if (config.EnableDRPC == true)
+            if (config.EnableDRPC)
             {
                 client.Dispose();
             }
