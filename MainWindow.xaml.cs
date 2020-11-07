@@ -86,7 +86,7 @@ namespace OcarinaPlayer
                     alert.CancelText = "No";
 
                     var result = alert.ShowDialog();
-                    if(result.ToString() == "OK")
+                    if (result.ToString() == "OK")
                     {
                         System.Diagnostics.Process.Start("https://github.com/hernikplays/OcarinaPlayer/releases/latest");
                     }
@@ -99,7 +99,7 @@ namespace OcarinaPlayer
 
             //SETTING TEXT TO LANG
             lang = LanguageStrings.GetStrings(config.Lang);
-            
+
 
             FileH.Header = lang.FileText;
             OFile.Header = lang.OpenFile;
@@ -139,7 +139,7 @@ namespace OcarinaPlayer
                 });
             }
             var folderfilelist = Directory.GetFiles(config.MusicFolderPath);
-            var typeArray = CodecFactory.SupportedFilesFilterEn.Replace("Supported Files|","").Split(';');
+            var typeArray = CodecFactory.SupportedFilesFilterEn.Replace("Supported Files|", "").Split(';');
             List<FolderListItem> musicList = new List<FolderListItem>();
             foreach (var item in folderfilelist)
             {
@@ -147,7 +147,7 @@ namespace OcarinaPlayer
                 {
                     if (item.EndsWith(type.Replace("*", "")))
                     {
-                        var musobj = new FolderListItem(null,item);
+                        var musobj = new FolderListItem(null, item);
                         //musobj.Path = item;
                         musicList.Add(musobj);
                     }
@@ -166,13 +166,13 @@ namespace OcarinaPlayer
                     if (string.IsNullOrEmpty(playing.Tag.Title))
                     {
                         var filename = Path.GetFileName(song.Path);
-                        FolderList.Items.Add(new FolderListItem(filename,song.Path));
+                        FolderList.Items.Add(new FolderListItem(filename, song.Path));
                     }
                     else
                     {
                         var name = string.IsNullOrEmpty(playing.Tag.Title) ? "Unknown" : playing.Tag.FirstPerformer + " - " + playing.Tag.Title;
                         FolderList.Items.Add(new FolderListItem(name, song.Path));
-                        
+
                     }
                 }
             }
@@ -187,7 +187,7 @@ namespace OcarinaPlayer
                         isValid = true;
                     }
                 }
-                if(isValid)
+                if (isValid)
                 {
                     var playing = TagLib.File.Create(CommArgs[0]);
                     if (string.IsNullOrEmpty(playing.Tag.Title))
@@ -208,7 +208,7 @@ namespace OcarinaPlayer
 
         }
 
-        
+
         public ISoundOut soundOut;
         public IWaveSource waveSource;
         private List<string> file = new List<string>();
@@ -464,7 +464,7 @@ namespace OcarinaPlayer
                         i = 0;
                         if (loop)
                         {
-                            
+
                             play(sender, new RoutedEventArgs());
                         }
                     }
@@ -514,7 +514,7 @@ namespace OcarinaPlayer
         public void prevThumb(object sender, EventArgs e)
         {
             var ar = new RoutedEventArgs();
-            btnPrev_Click(sender,ar);
+            btnPrev_Click(sender, ar);
         }
 
         public void playThumb(object sender, EventArgs e)
@@ -599,10 +599,13 @@ namespace OcarinaPlayer
             {
                 soundOut.Dispose();
             }
+            config = Config.getConf();
             if (config.EnableDRPC)
             {
                 client.Dispose();
             }
+
+            Application.Current.Shutdown();
         }
 
         private void volumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -715,7 +718,7 @@ namespace OcarinaPlayer
                 if (soundOut != null)
                     soundOut.Dispose();
                 RoutedEventArgs r = new RoutedEventArgs();
-                play(sender,r);
+                play(sender, r);
             }
         }
 
@@ -753,7 +756,7 @@ namespace OcarinaPlayer
             {
                 if (e.ClickCount == 2)
                 {
-                    i = (_npList.IndexOf(((ListBoxItem)sender).Content.ToString()) == 0)? _npList.Count-1 : _npList.IndexOf(((ListBoxItem)sender).Content.ToString())-1;
+                    i = (_npList.IndexOf(((ListBoxItem)sender).Content.ToString()) == 0) ? _npList.Count - 1 : _npList.IndexOf(((ListBoxItem)sender).Content.ToString()) - 1;
                     btnNext_Click(sender, new RoutedEventArgs());
                 }
                 shouldDrag = true;
@@ -765,10 +768,10 @@ namespace OcarinaPlayer
 
         private void Playlist_OnDrop(object sender, DragEventArgs e)
         {
-            if(shouldDrag)
+            if (shouldDrag)
             {
                 string droppedData = e.Data.GetData(typeof(string)) as string;
-                string target = ((ListBoxItem) (sender)).DataContext as string;
+                string target = ((ListBoxItem)(sender)).DataContext as string;
 
                 int removedIdx = Playlist.Items.IndexOf(droppedData);
                 int targetIdx = Playlist.Items.IndexOf(target);
@@ -800,9 +803,11 @@ namespace OcarinaPlayer
         {
             if (e.Key == Key.Space)
             {
-                play(sender,new RoutedEventArgs());
+                play(sender, new RoutedEventArgs());
             }
         }
+
+        
 
     }
 }
