@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OcarinaPlayer.Properties
+namespace Ocarina.Properties
 {
 
 
