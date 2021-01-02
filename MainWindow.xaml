@@ -17,17 +17,18 @@
         Loaded="MainWindow_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="73*"></RowDefinition>
-            <RowDefinition Height="347*"></RowDefinition>
+            <RowDefinition Height="40*"></RowDefinition>
+            <RowDefinition Height="319*"></RowDefinition>
+            <RowDefinition Height="61*"></RowDefinition> <!-- Space for Controls, maybe put into separate grid-->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="65*"></ColumnDefinition>
             <ColumnDefinition Width="332*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Name="HiBlock" Style="{DynamicResource MaterialDesignHeadline5TextBlock}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8,22,0,21.8" Height="29" Width="61">Hello,</TextBlock>
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0.4,1.2,10,0">
-            <materialDesign:Card Height="66">
-                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" TextWrapping="Wrap" VerticalAlignment="Center" Padding="10,0,0,0">Man</TextBlock>
+        <TextBlock Name="HiBlock" Style="{DynamicResource MaterialDesignHeadline5TextBlock}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8,6,0,5" Height="29" Width="61">Hello,</TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0.4,1,9.6,5.2">
+            <materialDesign:Card Height="105" Margin="0,0,0.4,0">
+                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" TextWrapping="Wrap" VerticalAlignment="Center" Padding="10,0,0,0"><Image Name="Album"></Image> Man</TextBlock>
             </materialDesign:Card>
         </StackPanel>
     </Grid>

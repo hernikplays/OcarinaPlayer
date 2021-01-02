@@ -62,9 +62,21 @@ namespace Ocarina
                         else song.Album = tag.Tag.Album;
                         if (string.IsNullOrEmpty(tag.Tag.FirstPerformer)) song.Author = "Unknown";
                         else song.Author = tag.Tag.FirstPerformer;
+                        song.Tag = tag.Tag;
                         song.Position = tag.Tag.Track;
                         song.Path = s;
                         SongsInMusicFolder.Add(song);
+                    }
+                }
+
+                //* Add albums to UI
+                foreach (var song in SongsInMusicFolder)
+                {
+                    if(song.Tag.Pictures.Length > 0)
+                    {
+                        MemoryStream stream = new MemoryStream(song.Tag.Pictures[0].Data.Data);
+                        BitmapFrame bmp = BitmapFrame.Create(stream);
+                        Album.Source = bmp;
                     }
                 }
             }
