@@ -20,10 +20,14 @@
             <RowDefinition Height="73*"></RowDefinition>
             <RowDefinition Height="347*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Name="HiBlock" Style="{DynamicResource MaterialDesignHeadline5TextBlock}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8">Hello, </TextBlock>
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,1.2,-0.4,0">
-            <materialDesign:Card Padding="32,32,32,64" Margin="16,16,650,0">
-                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" TextWrapping="Wrap">Man</TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="65*"></ColumnDefinition>
+            <ColumnDefinition Width="332*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Name="HiBlock" Style="{DynamicResource MaterialDesignHeadline5TextBlock}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8,22,0,21.8" Height="29" Width="61">Hello,</TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0.4,1.2,10,0">
+            <materialDesign:Card Height="66">
+                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" TextWrapping="Wrap" VerticalAlignment="Center" Padding="10,0,0,0">Man</TextBlock>
             </materialDesign:Card>
         </StackPanel>
     </Grid>
